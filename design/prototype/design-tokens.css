@@ -1,0 +1,50 @@
+/* ScamShield Africa design tokens. Single source of truth: design-tokens.json mirrors this file. */
+:root{
+  --font-sans:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,monospace;
+  --fs-xs:.8125rem; --fs-sm:.9375rem; --fs-md:1.0625rem; --fs-lg:1.25rem; --fs-xl:1.625rem; --fs-2xl:2.125rem;
+  --lh-tight:1.2; --lh-body:1.55;
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:24px; --sp-6:32px; --sp-7:48px; --sp-8:64px;
+  --r-sm:6px; --r-md:12px; --r-lg:20px; --r-pill:999px;
+  --tap:48px; --focus-w:3px;
+  --shadow-1:0 1px 2px rgba(20,32,31,.08),0 1px 8px rgba(20,32,31,.06);
+  --shadow-2:0 8px 28px rgba(20,32,31,.18);
+  --dur:160ms;
+
+  /* Light theme: warm paper + deep teal + signal amber */
+  --bg:#F6F2E8; --surface:#FFFFFF; --surface-2:#EFEADD; --ink:#14201F; --ink-2:#44534F; --line:#CFC8B5;
+  --brand:#0B5A53; --brand-ink:#FFFFFF; --brand-soft:#DCEEEA; --brand-soft-ink:#08423D;
+  --accent:#F2B134; --accent-ink:#2B1D00;
+  --focus:#1B4FD8;
+  --risk-high:#A8211A;   --risk-high-bg:#FBE4E1;
+  --risk-med:#8A5200;    --risk-med-bg:#FCEBC8;
+  --ok:#17653A;          --ok-bg:#DDF1E4;
+  --unknown:#43505E;     --unknown-bg:#E6E9EE;
+  --info:#1D55A0;        --info-bg:#E0ECFA;
+  --chart-1:#0B5A53; --chart-2:#B3541E; --chart-3:#5B4B9B; --chart-4:#8A6A00; --chart-grid:#DDD6C4;
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --bg:#0B1514; --surface:#13221F; --surface-2:#1B2E2A; --ink:#EAF1EE; --ink-2:#A9BDB8; --line:#2D4540;
+  --brand:#5CCBBB; --brand-ink:#04211D; --brand-soft:#17332F; --brand-soft-ink:#BFEDE5;
+  --accent:#F2B134; --accent-ink:#2B1D00;
+  --focus:#8FB0FF;
+  --risk-high:#FF9A91;  --risk-high-bg:#3B1816;
+  --risk-med:#F5BE5A;   --risk-med-bg:#3A2A0C;
+  --ok:#7ED9A3;         --ok-bg:#12301F;
+  --unknown:#B3BFCC;    --unknown-bg:#243039;
+  --info:#9CC4FF;       --info-bg:#162A44;
+  --chart-1:#5CCBBB; --chart-2:#F0955E; --chart-3:#B7A6F5; --chart-4:#E3C25A; --chart-grid:#2D4540;
+  --shadow-1:0 1px 2px rgba(0,0,0,.5); --shadow-2:0 8px 28px rgba(0,0,0,.6);
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1514; --surface:#13221F; --surface-2:#1B2E2A; --ink:#EAF1EE; --ink-2:#A9BDB8; --line:#2D4540;
+    --brand:#5CCBBB; --brand-ink:#04211D; --brand-soft:#17332F; --brand-soft-ink:#BFEDE5; --focus:#8FB0FF;
+    --risk-high:#FF9A91; --risk-high-bg:#3B1816; --risk-med:#F5BE5A; --risk-med-bg:#3A2A0C;
+    --ok:#7ED9A3; --ok-bg:#12301F; --unknown:#B3BFCC; --unknown-bg:#243039; --info:#9CC4FF; --info-bg:#162A44;
+    --chart-1:#5CCBBB; --chart-2:#F0955E; --chart-3:#B7A6F5; --chart-4:#E3C25A; --chart-grid:#2D4540;
+    color-scheme:dark;
+  }
+}

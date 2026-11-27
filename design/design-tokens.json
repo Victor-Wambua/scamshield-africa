@@ -1,0 +1,12 @@
+{
+  "$comment": "Mirror of design-tokens.css. Contrast results: see design/accessibility.md.",
+  "font": {"sans": "Segoe UI, system-ui, Roboto, sans-serif", "mono": "ui-monospace, Menlo, Consolas, monospace"},
+  "fontSize": {"xs": "0.8125rem", "sm": "0.9375rem", "md": "1.0625rem", "lg": "1.25rem", "xl": "1.625rem", "2xl": "2.125rem"},
+  "space": {"1": "4px", "2": "8px", "3": "12px", "4": "16px", "5": "24px", "6": "32px", "7": "48px", "8": "64px"},
+  "radius": {"sm": "6px", "md": "12px", "lg": "20px", "pill": "999px"},
+  "tapTarget": "48px",
+  "color": {
+    "light": {"bg":"#F6F2E8","surface":"#FFFFFF","surface2":"#EFEADD","ink":"#14201F","ink2":"#44534F","line":"#CFC8B5","brand":"#0B5A53","brandInk":"#FFFFFF","brandSoft":"#DCEEEA","brandSoftInk":"#08423D","accent":"#F2B134","accentInk":"#2B1D00","focus":"#1B4FD8","riskHigh":"#A8211A","riskHighBg":"#FBE4E1","riskMed":"#8A5200","riskMedBg":"#FCEBC8","ok":"#17653A","okBg":"#DDF1E4","unknown":"#43505E","unknownBg":"#E6E9EE","info":"#1D55A0","infoBg":"#E0ECFA"},
+    "dark": {"bg":"#0B1514","surface":"#13221F","surface2":"#1B2E2A","ink":"#EAF1EE","ink2":"#A9BDB8","line":"#2D4540","brand":"#5CCBBB","brandInk":"#04211D","brandSoft":"#17332F","brandSoftInk":"#BFEDE5","accent":"#F2B134","accentInk":"#2B1D00","focus":"#8FB0FF","riskHigh":"#FF9A91","riskHighBg":"#3B1816","riskMed":"#F5BE5A","riskMedBg":"#3A2A0C","ok":"#7ED9A3","okBg":"#12301F","unknown":"#B3BFCC","unknownBg":"#243039","info":"#9CC4FF","infoBg":"#162A44"}
+  }
+}
