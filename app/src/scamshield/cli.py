@@ -59,14 +59,14 @@ def main(argv: list[str] | None = None) -> int:
         from .evaluation import run_evaluation
 
         return run_evaluation(write=args.write)
+    if args.cmd == "seed" and args.reset and not settings.database_url.startswith("sqlite"):
+        print("--reset is only allowed on SQLite", file=sys.stderr)
+        return 2
     db = _db()
     if args.cmd == "seed":
         from .seed import seed
 
         if args.reset:
-            if not settings.database_url.startswith("sqlite"):
-                print("--reset is only allowed on SQLite", file=sys.stderr)
-                return 2
             Base.metadata.drop_all(db.engine)
             Base.metadata.create_all(db.engine)
         with db.factory() as session:

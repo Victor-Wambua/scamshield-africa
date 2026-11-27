@@ -191,10 +191,7 @@ def extract_urls(text: str) -> list[str]:
 def extract_phones(text: str) -> list[str]:
     seen: list[str] = []
     for m in PHONE_IN_TEXT.finditer(text):
-        try:
-            n = normalize_phone(m.group(0))
-        except InvalidIndicator:
-            continue
+        n = normalize_phone(m.group(0))  # PHONE_IN_TEXT only matches shapes normalize_phone accepts
         if n not in seen:
             seen.append(n)
     return seen

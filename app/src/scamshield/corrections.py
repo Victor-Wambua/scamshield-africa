@@ -14,7 +14,7 @@ from .models import Correction, Evidence, Indicator, Report, ReviewEvent, User, 
 from .normalize import InvalidIndicator, normalize
 from .notify import notify_user
 from .permissions import can
-from .reports import PUBLIC_STATUSES, next_ref, recompute_indicator
+from .reports import PUBLIC_STATUSES, recompute_indicator
 from .rules import correction_due, correction_overdue
 
 RELATIONSHIPS = ("owner", "representative", "affected", "researcher", "other")

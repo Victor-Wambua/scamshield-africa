@@ -49,6 +49,18 @@ def _user(db: Session, settings: Settings, email: str, role: str, org: Organisat
     return u
 
 
+def _label_everything_synthetic(db: Session) -> None:
+    """The seed runs on an empty database, so every row it created is synthetic by construction."""
+    from sqlalchemy import update
+
+    from .db import Base
+
+    for table in Base.metadata.sorted_tables:
+        if "origin" in table.c and table.name != "mail_outbox":
+            db.execute(update(table).where(table.c.origin == "user-submitted").values(origin=ORIGIN))
+    db.flush()
+
+
 def seed(db: Session, settings: Settings, out_file: Path | None = None) -> dict[str, str]:
     if db.scalar(select(Indicator.id).limit(1)) is not None or db.scalar(select(User.id).limit(1)) is not None:
         raise RuntimeError("Database is not empty. Use --reset (SQLite dev only) to rebuild the demo data.")
@@ -137,6 +149,7 @@ def seed(db: Session, settings: Settings, out_file: Path | None = None) -> dict[
     key, full = orgs.create_key(scope, a_admin, "Demo integration (test)", ["lookup", "report", "intel", "analytics"], "test", settings)
     notify.run_digest(db)
     db.flush()
+    _label_everything_synthetic(db)
 
     creds = {
         "password (all demo accounts)": DEMO_PASSWORD,

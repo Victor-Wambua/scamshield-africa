@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
-from sqlalchemy import func, select
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from . import audit, mailer
@@ -107,11 +107,6 @@ def validate_input(inp: SubmitInput, settings: Settings, now: datetime | None = 
     return norm, errors
 
 
-def next_ref(db: Session, prefix: str, model: Any) -> str:
-    n = (db.scalar(select(func.max(model.id))) or 0) + 1
-    return f"{prefix}-{n:04d}"
-
-
 def message_priors(db: Session, text: str, exclude_report_id: int | None = None) -> list[Prior]:
     sig = minhash(text)
     if not sig:
@@ -128,7 +123,8 @@ def message_priors(db: Session, text: str, exclude_report_id: int | None = None)
     seen: set[int] = set()
     for rid, sim in most_similar(sig, cand, threshold=0.5):
         ind = db.get(Indicator, by_id[rid])
-        if ind is None or ind.id in seen:
+        assert ind is not None  # FK guarantees the indicator exists
+        if ind.id in seen:
             continue
         seen.add(ind.id)
         out.append(Prior(ind.id, ind.type, mask_value(ind.type, ind.norm_value), ind.status, ind.independent_count, "similar", sim))
@@ -266,8 +262,7 @@ def candidate_types(q: str, hint: str | None) -> list[tuple[str, str]]:
             n = normalize(t, q)
         except InvalidIndicator:
             continue
-        if (t, n) not in seen:
-            seen.append((t, n))
+        seen.append((t, n))
     return seen
 
 

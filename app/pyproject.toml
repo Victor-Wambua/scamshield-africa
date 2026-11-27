@@ -33,7 +33,7 @@ packages = ["src/scamshield"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-q -m 'not e2e'"
+addopts = "-m 'not e2e' -p no:warnings"
 markers = ["e2e: browser end-to-end tests (need Chromium)"]
 
 [tool.coverage.run]
