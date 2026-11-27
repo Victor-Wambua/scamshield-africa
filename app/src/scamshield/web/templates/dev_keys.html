@@ -1,0 +1,15 @@
+{% extends 'base.html' %}{% from 'macros.html' import ico, csrf_field with context %}
+{% block title %}API keys{% endblock %}
+{% block content %}
+<h1>API keys</h1>
+{% if new_key %}<div class="notice warn" role="alert">{{ ico('alert') }}<div><b>Copy your key now. It is shown only once.</b><p class="secret" id="newkey">{{ new_key }}</p><button type="button" class="btn sm" data-copy="newkey">Copy</button></div></div>{% endif %}
+{% if can_manage %}<form method="post" action="/dev/keys" class="card stack">{{ csrf_field() }}<h2>Create a key</h2>
+ <div class="field"><label for="name">Name</label><input id="name" name="name" type="text" required maxlength="80"></div>
+ <fieldset><legend>Scopes</legend>{% for s in scopes %}<label class="check"><input type="checkbox" name="scopes" value="{{ s }}" {% if s in ['lookup'] %}checked{% endif %}><span>{{ s }}</span></label>{% endfor %}</fieldset>
+ <div class="field"><label for="environment">Environment</label><select id="environment" name="environment"><option value="test">Test</option><option value="live" disabled>Live (needs approval)</option></select></div>
+ <button class="btn" type="submit">Create key</button></form>
+{% else %}<p class="notice info">Only organisation administrators can create or revoke keys.</p>{% endif %}
+<div class="tbl-wrap mt">{% if keys %}<table class="cards"><thead><tr><th>Name</th><th>Prefix</th><th>Scopes</th><th>Environment</th><th>Last used</th><th>State</th><th>Actions</th></tr></thead><tbody>
+{% for k in keys %}<tr><td data-l="Name">{{ k.name }}</td><td data-l="Prefix" class="mono">{{ k.prefix }}</td><td data-l="Scopes">{{ k.scopes }}</td><td data-l="Env">{{ k.environment }}</td><td data-l="Last used">{{ k.last_used_at.strftime('%Y-%m-%d %H:%M') if k.last_used_at else 'Never' }}</td><td data-l="State">{{ 'Revoked' if k.revoked_at else 'Active' }}</td>
+<td data-l="Actions">{% if can_manage and not k.revoked_at %}<form method="post" action="/dev/keys/{{ k.id }}/revoke" class="row">{{ csrf_field() }}<input name="reason" type="text" placeholder="Reason" required minlength="4" aria-label="Reason for revoking {{ k.name }}"><button class="btn sm danger" type="submit">Revoke</button></form>{% endif %}</td></tr>{% endfor %}</tbody></table>{% else %}<div class="empty">{{ ico('key') }}<p>No keys yet.</p></div>{% endif %}</div>
+{% endblock %}

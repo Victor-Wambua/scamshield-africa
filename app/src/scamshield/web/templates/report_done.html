@@ -1,0 +1,8 @@
+{% extends 'base.html' %}{% from 'macros.html' import ico with context %}
+{% block title %}Report received{% endblock %}
+{% block content %}
+<div class="verdict low">{{ ico('check') }}<div><h1 class="mb0">Report received</h1><p class="mb0">Your reference is <b class="mono" id="ref">{{ ref }}</b>.</p></div></div>
+<div class="card mt"><h2>What happens next</h2><ol><li>We check whether others reported the same indicator.</li><li>A moderator reviews it. Nothing is published before review.</li><li>{% if user %}You can follow progress under <a href="/mine">My reports</a>.{% else %}Create an account to follow progress and get updates.{% endif %}</li></ol>
+{% if dup %}<p class="notice info">This indicator has been reported before. {% if not ind %}Because it came from the same account or device as an earlier report, it does not count as an additional independent report.{% else %}You are an additional independent reporter once a moderator accepts it.{% endif %}</p>{% endif %}</div>
+<div class="btn-row mt"><a class="btn" href="/report">Report another</a><a class="btn secondary" href="/">Back to check</a></div>
+{% endblock %}

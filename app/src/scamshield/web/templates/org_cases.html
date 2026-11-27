@@ -1,0 +1,7 @@
+{% extends 'base.html' %}{% from 'macros.html' import ico, csrf_field with context %}
+{% block title %}Cases{% endblock %}
+{% block content %}
+<h1>Cases</h1>
+<form method="post" action="/org/cases" class="card row">{{ csrf_field() }}<div><label for="title">New case title</label><input id="title" name="title" type="text" required minlength="3" maxlength="200"></div><button class="btn" type="submit">Create case</button></form>
+<div class="tbl-wrap mt">{% if cases %}<table class="cards"><thead><tr><th>Case</th><th>Status</th><th>Opened</th></tr></thead><tbody>{% for c in cases %}<tr><td data-l="Case"><a href="/org/cases/{{ c.id }}">{{ c.title }}</a></td><td data-l="Status"><span class="chip {{ 'review' if c.status == 'open' else 'unverified' }}">{{ c.status }}</span></td><td data-l="Opened">{{ c.created_at.date() }}</td></tr>{% endfor %}</tbody></table>{% else %}<div class="empty">{{ ico('case') }}<p>No cases yet.</p></div>{% endif %}</div>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}{% from 'macros.html' import ico, csrf_field, cat_label with context %}
+{% block title %}Notifications{% endblock %}
+{% block content %}
+<h1>Notifications</h1>
+<form method="post" action="/notifications" class="stack">{{ csrf_field() }}
+ <section class="card"><h2>Alert me about new verified warnings</h2>
+  {% for c in cats %}<div class="switch"><label for="cat_{{ c }}" class="mb0">{{ cat_label(c) }}</label><input type="checkbox" id="cat_{{ c }}" name="cat_{{ c }}" {% if subs.get(c) and subs[c].enabled %}checked{% endif %}></div>{% endfor %}</section>
+ <section class="card"><h2>Events</h2>
+  <div class="switch"><label for="on_status_change" class="mb0">Status changes on my reports</label><input type="checkbox" id="on_status_change" name="on_status_change" {% if pref.on_status_change %}checked{% endif %}></div>
+  <div class="switch"><label for="on_new_verified" class="mb0">New verified threats</label><input type="checkbox" id="on_new_verified" name="on_new_verified" {% if pref.on_new_verified %}checked{% endif %}></div>
+  <div class="switch"><label for="on_org_updates" class="mb0">Updates from my organisation</label><input type="checkbox" id="on_org_updates" name="on_org_updates" {% if pref.on_org_updates %}checked{% endif %}></div></section>
+ <section class="card"><h2>Channel and frequency</h2><p class="small muted">Email only for now. SMS and WhatsApp stay off until a provider is verified. In this pilot, emails go to a sandbox log and are not delivered.</p>
+  <div class="switch" data-off><label class="mb0">SMS</label><input type="checkbox" disabled aria-label="SMS (not available yet)"></div><div class="switch" data-off><label class="mb0">WhatsApp</label><input type="checkbox" disabled aria-label="WhatsApp (not available yet)"></div>
+  <div class="field mt"><label for="frequency">How often</label><select id="frequency" name="frequency">{% for k in ['instant','daily','weekly'] %}<option value="{{ k }}" {% if pref.frequency == k %}selected{% endif %}>{{ k|capitalize }}</option>{% endfor %}</select></div></section>
+ <button class="btn" type="submit">Save preferences</button>
+</form>
+<section class="card mt"><h2>Recent</h2>{% if recent %}<ul class="list">{% for n in recent %}<li><b>{{ n.subject }}</b><br><span class="small muted">{{ n.created_at.date() }}</span><p class="small mb0" style="white-space:pre-wrap">{{ n.body }}</p></li>{% endfor %}</ul>{% else %}<p class="muted">Nothing yet.</p>{% endif %}</section>
+{% endblock %}

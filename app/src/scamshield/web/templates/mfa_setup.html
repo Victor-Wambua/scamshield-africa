@@ -1,0 +1,16 @@
+{% extends 'base.html' %}{% from 'macros.html' import csrf_field, field_error, ico with context %}
+{% block title %}Set up authenticator{% endblock %}
+{% block content %}
+<div style="max-width:560px;margin:0 auto">
+{% if codes %}
+<h1>Save your recovery codes</h1><div class="notice warn" role="alert">{{ ico('alert') }}<span>These are shown once. Each works one time if you lose your authenticator.</span></div>
+<pre class="code mt" id="rc">{% for c in codes %}{{ c }}
+{% endfor %}</pre><a class="btn mt" href="{{ dest }}">Continue</a>
+{% else %}
+<h1>Set up your authenticator</h1>
+<p class="muted">Your role requires a second step. Scan the code in an authenticator app, or type the key, then enter the 6-digit code.</p>
+{% if qr %}<div class="qr">{{ qr|safe }}</div>{% endif %}
+<p class="label mt">Key</p><p class="secret" id="secret">{{ secret }}</p>
+<form method="post" action="/mfa/setup" class="stack mt">{{ csrf_field() }}<div class="field"><label for="code">6-digit code</label><input id="code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" required maxlength="6" {% if errors.code %}aria-invalid="true"{% endif %}>{{ field_error(errors, 'code') }}</div><button class="btn block" type="submit">Confirm and finish</button></form>
+{% endif %}</div>
+{% endblock %}

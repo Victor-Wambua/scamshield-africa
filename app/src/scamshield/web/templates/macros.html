@@ -1,0 +1,40 @@
+{% macro ico(name, cls='') -%}
+<svg class="ico {{ cls }}" viewBox="0 0 24 24" aria-hidden="true" focusable="false">{{ icons.get(name, '')|safe }}</svg>
+{%- endmacro %}
+
+{% macro logo(size=32) -%}
+<svg width="{{ size }}" height="{{ size }}" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 3l17 7v12c0 11-7 19-17 23C14 41 7 33 7 22V10z" fill="var(--brand)"/><path d="M24 3l17 7v12c0 11-7 19-17 23z" fill="var(--accent)" opacity=".9"/><circle cx="22" cy="22" r="7" fill="none" stroke="#fff" stroke-width="3"/><path d="M27 27l6 6" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
+{%- endmacro %}
+
+{% macro status_chip(i) -%}
+{% if i.disputed %}<span class="chip disputed">{{ ico('alert','ico-sm') }}{{ i.status_label }}</span>
+{% elif i.status == 'verified' %}<span class="chip verified">{{ ico('check','ico-sm') }}{{ i.status_label }}</span>
+{% else %}<span class="chip unverified">{{ ico('info','ico-sm') }}{{ i.status_label }}</span>{% endif %}
+{%- endmacro %}
+
+{% macro risk_chip(level) -%}
+{% if level == 'high' %}<span class="chip high">Strong evidence</span>{% elif level == 'medium' %}<span class="chip med">Some evidence</span>{% else %}<span class="chip none">Limited evidence</span>{% endif %}
+{%- endmacro %}
+
+{% macro csrf_field() %}<input type="hidden" name="csrf_token" value="{{ csrf }}">{% endmacro %}
+
+{% macro field_error(errors, name) %}{% if errors and errors.get(name) %}<p class="err" id="err-{{ name }}" role="alert">{{ ico('alert','ico-sm') }}<span>{{ errors[name] }}</span></p>{% endif %}{% endmacro %}
+
+{% macro error_summary(errors) %}
+{% if errors %}<div class="notice err" role="alert" tabindex="-1" id="error-summary">{{ ico('alert') }}<div><b>Please fix the following</b><ul>{% for k, v in errors.items() %}<li><a href="#f-{{ k }}">{{ v }}</a></li>{% endfor %}</ul></div></div>{% endif %}
+{% endmacro %}
+
+{% macro type_label(t) -%}
+{{ {'phone':'Phone number','url':'Website or link','email':'Email address','wallet':'Wallet address','social':'Social media account','payment_ref':'Payment reference','business':'Business name','message':'Scam message'}.get(t, t) }}
+{%- endmacro %}
+
+{% macro cat_label(c) -%}
+{{ {'reversal':'Mistaken-transfer reversal','phishing':'Phishing','investment':'Investment scam','jobs':'Fake jobs','tax':'Tax or government','impersonation':'Impersonation','prize':'Fake prize','other':'Other'}.get(c, c) }}
+{%- endmacro %}
+
+{% macro kpi(label, value) %}<div class="kpi"><b>{{ value }}</b><span>{{ label }}</span></div>{% endmacro %}
+
+{% macro bars(rows) %}
+{% set ns = namespace(mx=0) %}{% for name, n in rows %}{% if n and n > ns.mx %}{% set ns.mx = n %}{% endif %}{% endfor %}
+{% for name, n in rows %}<div class="bar-row"><span>{{ name }}</span><div class="meter" role="img" aria-label="{{ name }}: {{ n if n is not none else 'fewer than threshold' }}"><i style="width:{{ ((n or 0) / ns.mx * 100) if ns.mx else 0 }}%"></i></div><b>{{ n if n is not none else '<5' }}</b></div>{% endfor %}
+{% endmacro %}

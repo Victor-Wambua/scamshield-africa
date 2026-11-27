@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block title %}Exports{% endblock %}
+{% block content %}
+<h1>Exports</h1><p class="muted">CSV of your organisation's own reports. It never includes reporter identity or raw evidence. Every export is logged.</p>
+<div class="card"><form method="get" action="/org/export.csv" class="row"><div><label for="days">Period</label><select id="days" name="days"><option value="30">Last 30 days</option><option value="90" selected>Last 90 days</option><option value="365">Last 365 days</option></select></div><button class="btn" type="submit">Download CSV</button></form></div>
+{% endblock %}

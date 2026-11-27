@@ -1,0 +1,7 @@
+{% extends 'base.html' %}{% from 'macros.html' import type_label, cat_label with context %}
+{% block title %}{{ r.ref }}{% endblock %}
+{% block content %}
+<p><a href="/org/reports">&larr; Our reports</a></p><h1>{{ r.ref }}</h1>
+<section class="card"><dl class="kv"><dt>Type</dt><dd>{{ type_label(r.itype) }}</dd><dt>Value</dt><dd class="mono">{{ r.raw_value }}</dd><dt>Category</dt><dd>{{ cat_label(r.category) }}</dd><dt>Status</dt><dd>{{ r.status|replace('_',' ') }}</dd></dl><p style="white-space:pre-wrap">{{ r.description }}</p>{% if r.message_text %}<pre class="code" style="white-space:pre-wrap">{{ r.message_text }}</pre>{% endif %}</section>
+<section class="card mt"><h2>Evidence</h2>{% for e in evidence %}<img class="evidence" src="/evidence/{{ e.id }}" alt="Evidence {{ loop.index }}" width="400">{% else %}<p class="muted">None.</p>{% endfor %}</section>
+{% endblock %}

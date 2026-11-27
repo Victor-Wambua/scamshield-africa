@@ -1,0 +1,22 @@
+{% extends 'base.html' %}{% from 'macros.html' import ico, csrf_field, field_error with context %}
+{% block title %}Analyse a message{% endblock %}
+{% block content %}
+<h1>Analyse a message</h1>
+<p class="muted">Paste a message to see which warning signs it shows. The text is analysed on our server and is not stored from this page.</p>
+<form method="post" action="/analyse" class="stack">{{ csrf_field() }}
+ <div class="field"><label for="text">Message (10 to 5,000 characters)</label><textarea id="text" name="text" required minlength="10" maxlength="5000" {% if error %}aria-invalid="true" aria-describedby="err-text"{% endif %}>{{ text }}</textarea>{% if error %}<p class="err" id="err-text" role="alert">{{ ico('alert','ico-sm') }}<span>{{ error }}</span></p>{% endif %}</div>
+ <button class="btn" type="submit">{{ ico('spark') }}Analyse</button>
+</form>
+{% if result %}
+<section class="mt stack" aria-live="polite">
+ <div class="verdict {{ {'several_warning_signs':'high','some_warning_signs':'med','few_warning_signs':'none'}[result.label] }}">{{ ico('alert' if result.label != 'few_warning_signs' else 'info') }}
+  <div><h2 class="mb0">{{ {'several_warning_signs':'Several warning signs','some_warning_signs':'Some warning signs','few_warning_signs':'Few warning signs'}[result.label] }}</h2>
+  <p class="mb0">Analysis confidence: <b>{{ 'High' if result.confidence >= 0.75 else 'Medium' if result.confidence >= 0.5 else 'Low' }} ({{ (result.confidence * 100)|round|int }}%)</b>. {{ result.disclaimer }}</p></div></div>
+ <section class="card"><h3>The message, with warning signs marked</h3><p class="hl-line">{% for seg in segments %}{% if seg.signal %}<mark class="hl" title="{{ seg.signal }}">{{ seg.text }}</mark>{% else %}{{ seg.text }}{% endif %}{% endfor %}</p></section>
+ <section class="card"><h3>Why</h3><ul>{% for r in result.reasons %}<li>{{ r.text }}{% if r.evidence %} <span class="muted small">(&ldquo;{{ r.evidence }}&rdquo;)</span>{% endif %}</li>{% endfor %}</ul></section>
+ {% if result.matched_prior_reports %}<section class="card"><h3>Matches earlier reports</h3><ul>{% for m in result.matched_prior_reports %}<li><a href="/i/{{ m.indicator_id }}">{{ m.type }} <span class="mask">{{ m.value }}</span></a> · {{ m.match }} match · {{ m.status }} · {{ m.independent_reports }} independent report(s)</li>{% endfor %}</ul></section>{% endif %}
+ <p class="small muted">Engine {{ result.engine }}. Rules and similarity, not a fraud verdict.</p>
+ <div class="btn-row"><a class="btn" href="/report">{{ t('report_cta') }}</a></div>
+</section>
+{% endif %}
+{% endblock %}

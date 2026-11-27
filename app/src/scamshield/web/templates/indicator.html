@@ -1,0 +1,42 @@
+{% extends 'base.html' %}{% from 'macros.html' import ico, status_chip, type_label, cat_label, risk_chip, csrf_field with context %}
+{% block title %}Record {{ i.value if not i.masked else '#' ~ i.id }}{% endblock %}
+{% block content %}
+<p><a href="/search">&larr; Back to search</a></p>
+<h1><span class="mask">{{ i.value }}</span></h1>
+<div class="verdict {{ i.banner }}" role="note">{{ ico('shield' if i.banner == 'high' else 'alert' if i.banner == 'med' else 'info') }}
+ <div><b>{% if i.status == 'verified' and not i.disputed %}Verified with evidence: treat as higher risk.{% elif i.disputed %}Disputed and under review. Treat with care, wording is softened.{% else %}Reported by others but not verified yet.{% endif %}</b>
+ <p class="mb0">{% if i.status == 'verified' and not i.disputed %}A moderator confirmed this indicator and it is backed by {{ 'several independent reporters' if i.independent_reports >= settings.verify_min_independent else 'primary evidence' }}.{% else %}This is not proof of fraud. It records what others have reported.{% endif %} {{ t('not_reported_note') }}</p></div></div>
+<div class="grid g-main mt">
+ <div class="stack">
+  <section class="card"><h2>Record</h2>
+   <dl class="kv">
+    <dt>Type</dt><dd>{{ type_label(i.type) }}</dd>
+    <dt>Risk category</dt><dd>{{ cat_label(i.risk_category) }}</dd>
+    <dt>Status</dt><dd>{{ status_chip(i) }}</dd>
+    <dt>Independent reports</dt><dd>{{ i.independent_reports }}</dd>
+    {% if staff %}<dt>Submissions</dt><dd>{{ i.submissions }} ({{ i.evidence_items }} evidence item{{ '' if i.evidence_items == 1 else 's' }})</dd>{% endif %}
+    <dt>First reported</dt><dd>{{ i.first_reported }}</dd>
+    <dt>Last observed</dt><dd>{{ i.last_observed }}</dd>
+    <dt>Last updated</dt><dd>{{ i.last_updated }}</dd>
+    <dt>Source</dt><dd>{{ i.source }}</dd>
+    <dt>Data origin</dt><dd>{{ i.origin }}</dd>
+    <dt>Record ID</dt><dd class="mono">#{{ i.id }}</dd>
+   </dl>
+   {% if i.masked %}<p class="small muted mt">Value partly hidden. Search the exact value to see it in full.</p>{% endif %}
+  </section>
+  <section class="card"><h2>Evidence confidence</h2>
+   <div class="row">{{ risk_chip(i.confidence_level) }}<b>{{ (i.evidence_confidence * 100)|round|int }}%</b></div>
+   <div class="meter mt" role="img" aria-label="Evidence confidence {{ (i.evidence_confidence * 100)|round|int }} percent"><i style="width:{{ (i.evidence_confidence * 100)|round|int }}%"></i></div>
+   <details class="mt"><summary>How this is worked out</summary><p class="small">Starts at 10%. Adds 12% per independent reporter (up to 5), 8% per evidence item (up to 3), 20% when a moderator attached primary evidence and 12% once verified. Capped at 40% while a correction request is open. It measures how well supported the report is, not how likely fraud is. Raw evidence and reporter identity are never shown publicly.</p></details>
+  </section>
+  <section class="card"><h2>Review history</h2>
+   {% if history %}<ul class="timeline">{% for h in history %}<li><b>{{ h.event }}</b> <span class="muted">{{ h.date }}</span>{% if staff and h.reason %}<br><span class="small">{{ h.reason }}</span>{% endif %}</li>{% endfor %}</ul>{% else %}<p class="muted">No review events yet.</p>{% endif %}
+  </section>
+ </div>
+ <aside class="stack">
+  <section class="card"><h2>What to do</h2><p>{{ advice }}</p><ul>{% for a in general %}<li>{{ a }}</li>{% endfor %}</ul></section>
+  <section class="card"><h2>Think this is wrong?</h2><p class="small">You can ask us to review or correct this record. We acknowledge right away and aim to decide within {{ settings.correction_sla_days }} days.</p><a class="btn secondary block" href="/correct/{{ i.id }}">Request a correction</a></section>
+  <a class="btn block" href="/report">{{ ico('flag') }}Report this or something similar</a>
+ </aside>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}{% from 'macros.html' import ico, csrf_field, field_error, error_summary with context %}
+{% block title %}Request a correction{% endblock %}
+{% block content %}
+<h1>Request a correction</h1>
+<p class="muted">Record #{{ ind_id }}. If this record is wrong, unlawful or harms you, tell us. We acknowledge your request immediately, mark the record as disputed while we review, and aim to decide within {{ settings.correction_sla_days }} days.</p>
+{{ error_summary(errors) }}
+<form method="post" action="/correct/{{ ind_id }}" class="stack" novalidate>{{ csrf_field() }}
+ <fieldset><legend>How are you connected to this record?</legend><div class="choices">
+  {% for k, label in [('owner','I own this number, website or account'),('representative','I represent the owner'),('affected','I was affected by the report'),('researcher','I am a researcher or journalist'),('other','Other')] %}<label class="choice"><input type="radio" name="relationship" value="{{ k }}" {% if v.relationship == k %}checked{% endif %} required><span>{{ label }}</span></label>{% endfor %}
+ </div>{{ field_error(errors, 'relationship') }}</fieldset>
+ <div class="field"><label for="f-explanation">What is wrong? (at least 20 characters)</label><textarea id="f-explanation" name="explanation" required minlength="20" maxlength="3000" {% if errors.explanation %}aria-invalid="true"{% endif %}>{{ v.explanation }}</textarea>{{ field_error(errors, 'explanation') }}</div>
+ <div class="field"><label for="f-contact_email">Your email (for our reply)</label><input id="f-contact_email" name="contact_email" type="email" required value="{{ v.contact_email }}">{{ field_error(errors, 'contact_email') }}</div>
+ <label class="check"><input type="checkbox" name="urgent_legal" value="1" {% if v.urgent_legal %}checked{% endif %}><span>This is an urgent legal matter (court order or threat to safety). A platform administrator is alerted.</span></label>
+ <label class="check"><input type="checkbox" name="acknowledged" value="1" id="f-acknowledged" required {% if v.acknowledged %}checked{% endif %}><span>I confirm the information I give is accurate.</span></label>{{ field_error(errors, 'acknowledged') }}
+ <div class="btn-row"><button class="btn" type="submit">Send request</button><a class="btn secondary" href="/i/{{ ind_id }}">Cancel</a></div>
+</form>
+{% endblock %}

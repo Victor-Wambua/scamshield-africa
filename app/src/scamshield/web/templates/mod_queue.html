@@ -1,0 +1,19 @@
+{% extends 'base.html' %}{% from 'macros.html' import ico, kpi as kpi_card, type_label with context %}
+{% block title %}Moderation queue{% endblock %}
+{% block content %}
+<h1>Moderation queue</h1>
+<div class="grid g4">{{ kpi_card('Waiting', kpi.waiting) }}{{ kpi_card('Awaiting evidence', kpi.awaiting) }}{{ kpi_card('Open corrections', kpi.corr) }}{{ kpi_card('Median time to first decision', kpi.median) }}</div>
+<form method="get" action="/mod" class="row mt" role="search">
+ <div><label for="f">Show</label><select id="f" name="f">{% for k, l in [('needs','Needs action'),('decided','Decided'),('all','All')] %}<option value="{{ k }}" {% if f == k %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+ <div><label for="q">Reference or value</label><input id="q" name="q" type="search" value="{{ q }}" maxlength="40"></div>
+ <button class="btn secondary" type="submit">Filter</button>
+</form>
+<div class="tbl-wrap mt">{% if rows %}<table class="cards"><thead><tr><th>Report</th><th>Indicator</th><th>Status</th><th>Signals</th><th class="num">Evidence</th><th>Received</th></tr></thead><tbody>
+{% for row in rows %}{% set r = row.r %}<tr>
+ <td data-l="Report"><a href="/mod/{{ r.id }}"><b class="mono">{{ r.ref }}</b></a></td>
+ <td data-l="Indicator">{{ type_label(r.itype) }} <span class="mask">{{ r.raw_value[:40] }}</span></td>
+ <td data-l="Status"><span class="chip {{ 'review' if r.status in ['received','in_review'] else 'verified' if r.status == 'accepted' else 'disputed' if r.status == 'awaiting_evidence' else 'unverified' }}">{{ r.status|replace('_',' ')|capitalize }}</span></td>
+ <td data-l="Signals">{% if row.same %}<span class="chip med">Same reporter</span> {% endif %}{% if row.dup %}<span class="chip review">Possible duplicate</span>{% endif %}{% if not row.same and not row.dup %}None{% endif %}</td>
+ <td class="num" data-l="Evidence">{{ row.ev }}</td><td data-l="Received">{{ r.created_at.date() }}</td></tr>{% endfor %}
+</tbody></table>{% else %}<div class="empty">{{ ico('check') }}<p>Nothing here. The queue is clear.</p></div>{% endif %}</div>
+{% endblock %}

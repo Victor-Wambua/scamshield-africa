@@ -1,0 +1,9 @@
+{% extends 'base.html' %}{% from 'macros.html' import ico, csrf_field, cat_label, type_label with context %}
+{% block title %}Campaigns{% endblock %}
+{% block content %}
+<h1>Verified threats</h1><p class="muted">Indicators verified with evidence across the network. Exact values are shared with approved partners only.</p>
+<form method="get" class="row"><div><label for="category">Category</label><select id="category" name="category"><option value="">All</option>{% for c in categories %}<option value="{{ c }}" {% if c == category %}selected{% endif %}>{{ cat_label(c) }}</option>{% endfor %}</select></div><button class="btn secondary" type="submit">Filter</button></form>
+<div class="tbl-wrap mt">{% if items %}<table class="cards"><thead><tr><th>Indicator</th><th>Category</th><th class="num">Independent reports</th><th>Last observed</th><th>Case</th></tr></thead><tbody>
+{% for i in items %}<tr><td data-l="Indicator">{{ type_label(i.type) }}<br><span class="mono">{{ i.value }}</span>{% if i.disputed %} <span class="chip disputed">Disputed</span>{% endif %}</td><td data-l="Category">{{ cat_label(i.category) }}</td><td class="num" data-l="Reports">{{ i.independent_reports }}</td><td data-l="Last observed">{{ i.last_observed }}</td>
+<td data-l="Case"><form method="post" action="/org/cases" class="row">{{ csrf_field() }}<input type="hidden" name="indicator_id" value="{{ i.id }}"><input type="text" name="title" value="Investigate {{ i.type }} #{{ i.id }}" aria-label="Case title" required minlength="3"><button class="btn sm" type="submit">Create case</button></form></td></tr>{% endfor %}</tbody></table>{% else %}<div class="empty">{{ ico('spark') }}<p>No verified indicators in this range.</p></div>{% endif %}</div>
+{% endblock %}

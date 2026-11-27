@@ -1,0 +1,47 @@
+{% extends 'base.html' %}{% from 'macros.html' import ico, csrf_field, field_error, error_summary, type_label, cat_label with context %}
+{% block title %}Report a scam{% endblock %}
+{% block content %}
+<h1>Report a scam</h1>
+<p class="muted">Reports are reviewed by moderators before anything is published. We record reports about numbers, links and messages. We do not publish accusations about people.</p>
+<ol class="stepper" aria-label="Progress">{% for n in range(5) %}<li></li>{% endfor %}</ol>
+{{ error_summary(errors) }}
+<form method="post" action="/report" enctype="multipart/form-data" data-wizard novalidate class="stack" id="report-form">
+ {{ csrf_field() }}
+ <div class="step"><h2>1. What are you reporting?</h2>
+  <fieldset><legend class="sr-only">Type</legend><div class="choices two">
+   {% for k in ['phone','url','email','message','wallet','social','payment_ref','business'] %}<label class="choice"><input type="radio" name="itype" value="{{ k }}" {% if v.itype == k %}checked{% endif %} required><span>{{ type_label(k) }}</span></label>{% endfor %}
+  </div>{{ field_error(errors, 'type') }}</fieldset>
+ </div>
+ <div class="step"><h2>2. Details</h2>
+  <div class="field"><label for="f-value">The number, link, email, wallet, account or reference</label><p class="hint">For a message, paste the text below instead.</p>
+   <input id="f-value" name="value" type="text" maxlength="600" value="{{ v.value }}" autocomplete="off" {% if errors.value %}aria-invalid="true" aria-describedby="err-value"{% endif %}>{{ field_error(errors, 'value') }}</div>
+  <div class="field"><label for="f-message_text">Message text (optional unless reporting a message)</label><textarea id="f-message_text" name="message_text" maxlength="5000">{{ v.message_text }}</textarea>{{ field_error(errors, 'message_text') }}</div>
+  <div class="field"><label for="f-category">Category</label><select id="f-category" name="category">{% for k in categories %}<option value="{{ k }}" {% if v.category == k %}selected{% endif %}>{{ cat_label(k) }}</option>{% endfor %}</select></div>
+  <div class="field"><label for="f-description">What happened? (20 to 2,000 characters)</label>
+   <textarea id="f-description" name="description" required minlength="20" maxlength="2000" {% if errors.description %}aria-invalid="true" aria-describedby="err-description"{% endif %}>{{ v.description }}</textarea>{{ field_error(errors, 'description') }}</div>
+  <div class="grid g3">
+   <div class="field"><label for="f-incident_date">Date (optional)</label><input id="f-incident_date" name="incident_date" type="date" value="{{ v.incident_date }}">{{ field_error(errors, 'incident_date') }}</div>
+   <div class="field"><label for="f-amount_kes">Amount lost, KES (optional)</label><input id="f-amount_kes" name="amount_kes" type="number" min="0" step="1" value="{{ v.amount_kes }}">{{ field_error(errors, 'amount_kes') }}</div>
+   <div class="field"><label for="f-county">County (optional)</label><select id="f-county" name="county"><option value="">Prefer not to say</option>{% for c in counties %}<option {% if v.county == c %}selected{% endif %}>{{ c }}</option>{% endfor %}</select></div>
+  </div>
+ </div>
+ <div class="step"><h2>3. Evidence (optional)</h2>
+  <p class="hint">Up to {{ settings.max_uploads_per_report }} images, {{ settings.max_upload_bytes // 1048576 }} MB each (PNG, JPEG or WebP). Hide other people's details first. Photo metadata is removed. Evidence is only visible to you and reviewers, never publicly.</p>
+  <div class="field"><label for="f-evidence">Screenshots</label><input id="f-evidence" name="evidence" type="file" accept="image/png,image/jpeg,image/webp" multiple>{{ field_error(errors, 'evidence') }}</div>
+ </div>
+ <div class="step"><h2>4. Consent</h2>
+  <label class="check"><input type="checkbox" name="consent_privacy" value="1" id="f-consent_privacy" required {% if v.consent_privacy %}checked{% endif %}><span>I have read the <a href="/about#privacy">privacy notice</a> and agree that my report is stored and reviewed.</span></label>{{ field_error(errors, 'consent_privacy') }}
+  <label class="check"><input type="checkbox" name="consent_truth" value="1" id="f-consent_truth" required {% if v.consent_truth %}checked{% endif %}><span>What I wrote is true to the best of my knowledge.</span></label>{{ field_error(errors, 'consent_truth') }}
+  <label class="check"><input type="checkbox" name="consent_share_partners" value="1" {% if v.consent_share_partners %}checked{% endif %}><span>Optional: share anonymised details with approved partner institutions.</span></label>
+  <label class="check"><input type="checkbox" name="consent_contact" value="1" {% if v.consent_contact %}checked{% endif %}><span>Optional: you may contact me about this report.</span></label>
+  <div class="field"><label for="f-contact_email">Email for follow-up (only if you ticked the box above)</label><input id="f-contact_email" name="contact_email" type="email" value="{{ v.contact_email }}" autocomplete="email">{{ field_error(errors, 'contact_email') }}</div>
+ </div>
+ <div class="step"><h2>5. Review and send</h2>
+  <pre class="code" id="review-box">Check the details, then send.</pre>
+  <p class="small muted">Sending the same report twice from one account counts as one independent report.</p>
+ </div>
+ <div class="step-nav"><button type="button" class="btn secondary" data-back hidden>Back</button><button type="button" class="btn" data-next>Next</button><button class="btn" type="submit" data-submit hidden>Send report</button></div>
+ <noscript><button class="btn" type="submit">Send report</button></noscript>
+ <button class="btn" type="submit" data-submit-all hidden>Send report</button>
+</form>
+{% endblock %}

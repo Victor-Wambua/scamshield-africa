@@ -1,0 +1,14 @@
+{% extends 'base.html' %}{% from 'macros.html' import ico, csrf_field, field_error, error_summary with context %}
+{% block title %}Create account{% endblock %}
+{% block content %}
+<div style="max-width:520px;margin:0 auto"><h1>Create an account</h1>
+<p class="muted">An account lets you follow your reports and get updates. You can also report without one.</p>
+{{ error_summary(errors) }}
+<form method="post" action="/register" class="stack" novalidate>{{ csrf_field() }}
+ <div class="field"><label for="f-display_name">Name (optional)</label><input id="f-display_name" name="display_name" type="text" maxlength="120" value="{{ v.display_name }}" autocomplete="name"></div>
+ <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" required value="{{ v.email }}" autocomplete="email" {% if errors.email %}aria-invalid="true"{% endif %}>{{ field_error(errors, 'email') }}</div>
+ <div class="field"><label for="f-password">Password</label><p class="hint">At least 10 characters with letters and a number.</p><input id="f-password" name="password" type="password" required minlength="10" autocomplete="new-password" {% if errors.password %}aria-invalid="true"{% endif %}>{{ field_error(errors, 'password') }}</div>
+ <label class="check"><input type="checkbox" name="terms" value="1" id="f-terms" required><span>I accept the terms and the <a href="/about#privacy">privacy notice</a>.</span></label>{{ field_error(errors, 'terms') }}
+ <button class="btn block" type="submit">Create account</button>
+</form></div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% from 'macros.html' import ico, logo with context %}
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}ScamShield Africa{% endblock %} · ScamShield Africa</title>
+<meta name="description" content="Check phone numbers, links and messages against community fraud reports. Not reported does not mean safe.">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/design-tokens.css">
+<link rel="stylesheet" href="/static/components.css">
+<link rel="stylesheet" href="/static/app.css">
+<script src="/static/theme.js"></script>
+</head>
+<body>
+<div class="shell{% if staff %} has-side{% endif %}">
+<a class="skip" href="#main">{{ t('skip') }}</a>
+{% if demo %}<div class="demo-bar" role="region" aria-label="Data notice"><span class="demo-note"><strong>Synthetic demonstration data.</strong><span class="long"> Records here are made up for demonstration and are not real incidents.</span></span></div>{% endif %}
+{% if lang == 'sw' %}<div class="notice info" role="note">{{ t('sw_draft_note') }}</div>{% endif %}
+<header class="topbar">
+ <a class="brand" href="/">{{ logo() }}<span>ScamShield<small>Africa · Kenya pilot</small></span></a>
+ <nav class="nav-desktop" aria-label="Main">{% for href, label, ic in nav %}<a href="{{ href }}" {% if path == href or (href != '/' and path.startswith(href + '/')) %}aria-current="page"{% endif %}>{{ ico(ic,'ico-sm') }}{{ t(label) if label.startswith('nav_') else label }}</a>{% endfor %}</nav>
+ <span class="spacer"></span>
+ <button class="icon-btn" type="button" data-theme-toggle aria-label="Switch light or dark theme">{{ ico('moon') }}</button>
+ <div class="menu"><button class="icon-btn" type="button" data-menu aria-haspopup="true" aria-expanded="false" aria-controls="acct" aria-label="Account and language">{{ ico('user' if user else 'menu') }}</button>
+  <div class="menu-pop" id="acct" hidden>
+   {% if user %}<span class="small muted" style="padding:6px 12px;display:block">{{ user.email }}</span><a href="/settings">Profile and settings</a><a href="/notifications">Notifications</a>
+   <form method="post" action="/logout"><input type="hidden" name="csrf_token" value="{{ csrf }}"><button type="submit">Sign out</button></form>
+   {% else %}<a href="/login">Sign in</a><a href="/register">Create account</a>{% endif %}
+   <a href="/lang/{{ 'en' if lang == 'sw' else 'sw' }}">{{ 'English' if lang == 'sw' else 'Kiswahili (draft translation)' }}</a><a href="/about">How we label things</a>
+  </div></div>
+</header>
+<div class="main">
+ {% if staff %}<nav class="side" aria-label="Section">{% for href, label, ic in nav %}<a href="{{ href }}" {% if path == href or (href != '/' and path.startswith(href + '/')) %}aria-current="page"{% endif %}>{{ ico(ic,'ico-sm') }}{{ t(label) if label.startswith('nav_') else label }}</a>{% endfor %}</nav>{% endif %}
+ <div class="view"><main id="main" tabindex="-1">
+ {% for kind, msg in flash %}<div class="notice {{ kind }}" role="status">{{ msg }}</div>{% endfor %}
+ {% block content %}{% endblock %}
+ </main></div>
+</div>
+<nav class="tabbar" aria-label="Main (mobile)">{% for href, label, ic in nav[:5] %}<a href="{{ href }}" {% if path == href or (href != '/' and path.startswith(href + '/')) %}aria-current="page"{% endif %}>{{ ico(ic) }}<span>{{ t(label) if label.startswith('nav_') else label }}</span></a>{% endfor %}</nav>
+</div>
+<script src="/static/app.js" defer></script>
+</body>
+</html>

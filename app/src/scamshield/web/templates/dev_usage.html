@@ -1,0 +1,7 @@
+{% extends 'base.html' %}{% from 'macros.html' import kpi as kpi_card with context %}
+{% block title %}API usage{% endblock %}
+{% block content %}
+<h1>API usage (last 7 days)</h1>
+<div class="grid g4">{{ kpi_card('Requests', u.total) }}{{ kpi_card('Errors', u.errors) }}{{ kpi_card('Throttled (429)', u.throttled) }}{{ kpi_card('Active keys', keys|rejectattr('revoked_at')|list|length) }}</div>
+<section class="card mt"><h2>By endpoint</h2>{% if u.by_endpoint %}<table><thead><tr><th>Endpoint</th><th class="num">Requests</th></tr></thead><tbody>{% for e, n in u.by_endpoint %}<tr><td class="mono">{{ e }}</td><td class="num">{{ n }}</td></tr>{% endfor %}</tbody></table>{% else %}<p class="muted">No requests yet.</p>{% endif %}</section>
+{% endblock %}

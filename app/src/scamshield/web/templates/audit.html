@@ -1,0 +1,11 @@
+{% extends 'base.html' %}{% from 'macros.html' import ico with context %}
+{% block title %}Audit log{% endblock %}
+{% block content %}
+<h1>Audit log</h1>
+<p class="muted">Append-only. Each entry is chained to the previous one by a hash.</p>
+<form method="get" action="/audit" class="row"><div><label for="action">Action starts with</label><input id="action" name="action" type="text" value="{{ action }}" maxlength="40"></div><button class="btn secondary" type="submit">Filter</button><a class="btn secondary" href="/audit?verify=1">Verify chain</a><a class="btn secondary" href="/audit.csv">Export CSV</a></form>
+{% if chain %}<div class="notice {{ 'ok' if chain[0] else 'err' }} mt" role="status">{{ 'Chain intact: ' ~ chain[1] ~ ' entries verified.' if chain[0] else 'CHAIN BROKEN at entry ' ~ chain[2] }}</div>{% endif %}
+<div class="tbl-wrap mt"><table class="cards"><thead><tr><th>Time (UTC)</th><th>Actor</th><th>Action</th><th>Target</th><th>Reason</th><th>Hash</th></tr></thead><tbody>
+{% for r in rows %}<tr><td data-l="Time">{{ r.ts.strftime('%Y-%m-%d %H:%M:%S') }}</td><td data-l="Actor">{{ r.actor_id or 'system/anonymous' }}</td><td data-l="Action"><b>{{ r.action }}</b></td><td data-l="Target">{{ r.target_type }} {{ r.target_id }}</td><td data-l="Reason">{{ r.reason }}</td><td data-l="Hash" class="mono">{{ r.hash[:10] }}</td></tr>{% endfor %}
+</tbody></table></div>
+{% endblock %}

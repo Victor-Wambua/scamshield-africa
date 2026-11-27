@@ -1,0 +1,7 @@
+{% extends 'base.html' %}{% from 'macros.html' import ico, csrf_field, cat_label with context %}
+{% block title %}Alert rules{% endblock %}
+{% block content %}
+<h1>Alert rules</h1><p class="muted">Email alerts when new threats are verified in a category. (Pilot: emails go to a sandbox log.)</p>
+<form method="post" action="/org/alerts" class="card row">{{ csrf_field() }}<div><label for="category">Category</label><select id="category" name="category">{% for c in categories %}<option value="{{ c }}">{{ cat_label(c) }}</option>{% endfor %}</select></div><div><label for="frequency">Frequency</label><select id="frequency" name="frequency"><option>instant</option><option>daily</option><option>weekly</option></select></div><button class="btn" type="submit">Add rule</button></form>
+<div class="tbl-wrap mt">{% if subs %}<table class="cards"><thead><tr><th>Category</th><th>Frequency</th><th>State</th><th>Actions</th></tr></thead><tbody>{% for s in subs %}<tr><td data-l="Category">{{ cat_label(s.category) }}</td><td data-l="Frequency">{{ s.frequency }}</td><td data-l="State">{{ 'On' if s.enabled else 'Off' }}</td><td data-l="Actions"><form method="post" action="/org/alerts/{{ s.id }}/toggle" class="row">{{ csrf_field() }}<button class="btn sm secondary" type="submit">{{ 'Turn off' if s.enabled else 'Turn on' }}</button><button class="btn sm danger" name="delete" value="1" type="submit">Delete</button></form></td></tr>{% endfor %}</tbody></table>{% else %}<div class="empty">{{ ico('bell') }}<p>No alert rules yet.</p></div>{% endif %}</div>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}How we label things{% endblock %}
+{% block content %}
+<h1>How we label things</h1>
+<div class="stack">
+<section class="card"><h2>What this is</h2><p>ScamShield Africa records what people report about phone numbers, links, emails, wallets and messages. It is not a public accusation list and never publishes names of private individuals.</p></section>
+<section class="card"><h2>Statuses</h2><dl class="kv"><dt>Verified with evidence</dt><dd>A moderator confirmed it AND either at least {{ settings.verify_min_independent }} independent reporters (different accounts and different devices) support it, or a moderator attached primary evidence.</dd><dt>Reported, not verified</dt><dd>Accepted after review, but not enough evidence to verify.</dd><dt>Disputed, under review</dt><dd>Someone asked for a correction. Wording is softened until decided.</dd></dl><p>Repeat reports from one person count once. Not reported does not mean safe.</p></section>
+<section class="card" id="privacy"><h2>Privacy notice (pilot summary)</h2><p>Reports are stored securely. Screenshots and message text are visible only to you, moderators and, for reports an institution submitted itself, that institution. Public pages never show evidence or who reported. Phone numbers and emails are partly hidden in lists; an exact search shows the full indicator. You can ask for your data to be exported or your account deleted in Settings. This pilot has not been legally reviewed and makes no compliance claim.</p></section>
+<section class="card"><h2>Data origin</h2><p>Every record carries an origin label: user-submitted, synthetic test data, mock integration, officially published or verified live. Demonstration data is labelled in the banner at the top of each page.</p></section>
+</div>
+{% endblock %}

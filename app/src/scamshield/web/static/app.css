@@ -1,0 +1,16 @@
+/* App-specific additions on top of the design system (tokens + components). */
+.row.gap-s{gap:var(--sp-2)} .mt{margin-top:var(--sp-4)} .mb0{margin-bottom:0}
+.mask{font-family:var(--font-mono)}
+.hl-line{white-space:pre-wrap;word-break:break-word}
+mark.hl{background:var(--risk-med-bg);color:var(--ink);border-bottom:3px solid var(--risk-med);padding:0 2px;border-radius:2px}
+form.inline{display:inline}
+.chart-line polyline{fill:none;stroke:var(--chart-1);stroke-width:2.5}
+dialog form{margin:0}
+.step[hidden]{display:none!important}
+.js .step-nav{display:flex}
+.step-nav{display:none;gap:var(--sp-3);margin-top:var(--sp-4)}
+.table-actions{display:flex;gap:8px;flex-wrap:wrap}
+details.card summary{cursor:pointer;font-weight:700}
+.secret{font-family:var(--font-mono);font-size:var(--fs-md);word-break:break-all;padding:var(--sp-3);background:var(--surface-2);border-radius:var(--r-sm)}
+img.evidence{max-width:100%;height:auto;border-radius:var(--r-sm);border:1px solid var(--line)}
+.qr svg{width:180px;height:180px;background:#fff;padding:8px;border-radius:var(--r-sm)}

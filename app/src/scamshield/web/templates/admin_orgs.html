@@ -1,0 +1,8 @@
+{% extends 'base.html' %}{% from 'macros.html' import csrf_field with context %}
+{% block title %}Organisations{% endblock %}
+{% block content %}
+<h1>Partner organisations</h1>
+<form method="post" action="/admin/orgs" class="card row">{{ csrf_field() }}<div><label for="name">Organisation name</label><input id="name" name="name" type="text" required minlength="3" maxlength="200"></div><div><label for="kind">Type</label><select id="kind" name="kind"><option>bank</option><option>fintech</option><option>telco</option><option>ngo</option><option>research</option></select></div><button class="btn" type="submit">Approve organisation</button></form>
+<div class="stack mt">{% for o in orgs %}<article class="card"><h2>{{ o.name }}</h2><p class="small muted">{{ o.kind }} · {{ o.status }} · origin {{ o.origin }}</p>
+<form method="post" action="/admin/orgs/{{ o.id }}/invite" class="row">{{ csrf_field() }}<div><label for="e{{ o.id }}">Invite user (email)</label><input id="e{{ o.id }}" name="email" type="email" required></div><div><label for="r{{ o.id }}">Role</label><select id="r{{ o.id }}" name="role"><option value="org_analyst">Analyst</option><option value="org_admin">Organisation administrator</option></select></div><button class="btn secondary" type="submit">Invite</button></form></article>{% endfor %}</div>
+{% endblock %}

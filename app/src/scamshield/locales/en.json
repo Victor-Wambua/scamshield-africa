@@ -1,0 +1,10 @@
+{
+ "nav_check": "Check", "nav_report": "Report", "nav_analyse": "Analyse", "nav_mine": "My reports", "nav_signin": "Sign in", "nav_alerts": "Alerts",
+ "h1_home": "Check before you pay or reply.",
+ "sub_home": "Search a phone number, website, email or payment reference that someone sent you. We show what others have reported and how well it is backed up.",
+ "search": "Search", "ph_search": "Number, link, email or till", "q_search": "What do you want to check?",
+ "verified_title": "Verified warnings", "report_cta": "Report a scam", "analyse_cta": "Analyse a message",
+ "not_reported_note": "Not reported does not mean safe.",
+ "skip": "Skip to main content", "demo_banner": "Synthetic demonstration data. These records are made up for demonstration and are not real incidents.",
+ "sw_draft_note": ""
+}

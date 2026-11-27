@@ -1,0 +1,33 @@
+{% extends 'base.html' %}{% from 'macros.html' import ico, status_chip, type_label, cat_label, risk_chip with context %}
+{% block title %}{{ 'Results' if q else 'Browse reports' }}{% endblock %}
+{% block content %}
+<h1>{{ 'Results' if q else 'Browse reports' }}</h1>
+<form action="/search" method="get" role="search" class="stack">
+ <div class="searchbox"><label for="q" class="sr-only">{{ t('q_search') }}</label><input id="q" name="q" type="search" value="{{ q }}" maxlength="600" placeholder="{{ t('ph_search') }}" autocomplete="off"><button class="btn" type="submit">{{ ico('search') }}{{ t('search') }}</button></div>
+ <div class="row">
+  <div><label for="type">Type</label><select id="type" name="type"><option value="">All types</option>{% for k in ['phone','url','email','wallet','social','payment_ref','business','message'] %}<option value="{{ k }}" {% if k == type %}selected{% endif %}>{{ type_label(k) }}</option>{% endfor %}</select></div>
+  <div><label for="status">Status</label><select id="status" name="status"><option value="">Any</option><option value="verified" {% if status == 'verified' %}selected{% endif %}>Verified with evidence</option><option value="unverified" {% if status == 'unverified' %}selected{% endif %}>Reported, not verified</option></select></div>
+  <div><label for="category">Category</label><select id="category" name="category"><option value="">Any</option>{% for k in categories %}<option value="{{ k }}" {% if k == category %}selected{% endif %}>{{ cat_label(k) }}</option>{% endfor %}</select></div>
+ </div>
+</form>
+{% if error %}<div class="notice warn mt" role="alert">{{ error }}</div>{% endif %}
+{% if q %}
+ {% if results %}
+ <p class="muted mt" role="status">{{ results|length }} matching record{{ '' if results|length == 1 else 's' }}.</p>
+ <div class="stack">{% for i in results %}
+  <a class="result" href="/i/{{ i.id }}?v={{ i.reveal }}">
+   <div class="row between"><b class="mask">{{ i.value }}</b>{{ status_chip(i) }}</div>
+   <p class="small muted mb0">{{ type_label(i.type) }} · {{ cat_label(i.risk_category) }} · {{ i.independent_reports }} independent report{{ '' if i.independent_reports == 1 else 's' }} · last observed {{ i.last_observed }}</p>
+  </a>{% endfor %}</div>
+ {% elif not error %}
+ <div class="empty mt">{{ ico('search') }}<h2>No published record found</h2><p>{{ t('not_reported_note') }} A new scam may not be reported yet. Be careful if anything feels wrong.</p>
+  <div class="btn-row" style="justify-content:center"><a class="btn" href="/report">{{ t('report_cta') }}</a><a class="btn secondary" href="/analyse">{{ t('analyse_cta') }}</a></div></div>
+ {% endif %}
+{% else %}
+ <p class="small muted mt">Lists show partly hidden values. Search an exact number, link or email to see the full record.</p>
+ {% if results %}<div class="stack">{% for i in results %}
+  <a class="result" href="/i/{{ i.id }}"><div class="row between"><b class="mask">{{ i.value }}</b>{{ status_chip(i) }}</div>
+  <p class="small muted mb0">{{ type_label(i.type) }} · {{ cat_label(i.risk_category) }} · {{ i.independent_reports }} independent report{{ '' if i.independent_reports == 1 else 's' }} · last observed {{ i.last_observed }}</p></a>{% endfor %}</div>
+ {% else %}<div class="empty mt">{{ ico('list') }}<p>Nothing matches these filters.</p></div>{% endif %}
+{% endif %}
+{% endblock %}

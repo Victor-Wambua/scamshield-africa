@@ -1,0 +1,15 @@
+{% extends 'base.html' %}{% from 'macros.html' import ico, csrf_field, type_label with context %}
+{% block title %}My reports{% endblock %}
+{% block content %}
+<h1>My reports</h1>
+{% if not rows %}<div class="empty">{{ ico('flag') }}<h2>No reports yet</h2><p>When you report a scam it appears here with its progress.</p><a class="btn" href="/report">{{ t('report_cta') }}</a></div>
+{% else %}<div class="stack">{% for row in rows %}{% set r = row.r %}
+<article class="card"><div class="row between"><h2 class="mb0 mono">{{ r.ref }}</h2><span class="chip {{ 'verified' if r.status == 'accepted' else 'review' if r.status in ['received','in_review'] else 'disputed' if r.status == 'awaiting_evidence' else 'unverified' }}">{{ r.status|replace('_',' ')|capitalize }}</span></div>
+ <p class="mb0">{{ type_label(r.itype) }} · <span class="mask">{{ row.masked }}</span> · {{ r.created_at.date() }}</p>
+ <ol class="stepper" aria-label="Progress">{% for s in stages %}<li class="{{ 'done' if loop.index < row.stage else 'now' if loop.index == row.stage else '' }}" title="{{ s }}"></li>{% endfor %}</ol>
+ <p class="small muted">{{ stages|join(' → ') }}</p>
+ {% if r.status == 'awaiting_evidence' %}<div class="notice warn"><span>Moderator request: {{ r.evidence_request }}</span></div>
+ <form method="post" action="/mine/{{ r.id }}/evidence" enctype="multipart/form-data" class="mt">{{ csrf_field() }}<label for="ev{{ r.id }}">Add an image</label><input id="ev{{ r.id }}" name="evidence" type="file" accept="image/png,image/jpeg,image/webp" required><button class="btn sm mt" type="submit">Send evidence</button></form>{% endif %}
+ {% if r.status in ['received','in_review','awaiting_evidence'] %}<form method="post" action="/mine/{{ r.id }}/withdraw" class="mt">{{ csrf_field() }}<button class="btn secondary sm" type="submit">Withdraw this report</button></form>{% endif %}
+</article>{% endfor %}</div>{% endif %}
+{% endblock %}

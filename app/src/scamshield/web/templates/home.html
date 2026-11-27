@@ -1,0 +1,28 @@
+{% extends 'base.html' %}{% from 'macros.html' import ico, status_chip, type_label, cat_label with context %}
+{% block title %}Check before you pay or reply{% endblock %}
+{% block content %}
+<section class="hero">
+ <h1>{{ t('h1_home') }}</h1>
+ <p class="muted">{{ t('sub_home') }}</p>
+ <form action="/search" method="get" role="search" class="searchbox">
+  <label for="q" class="sr-only">{{ t('q_search') }}</label>
+  <input id="q" name="q" type="search" required maxlength="600" placeholder="{{ t('ph_search') }}" autocomplete="off" autocapitalize="off" spellcheck="false">
+  <button class="btn" type="submit">{{ ico('search') }}{{ t('search') }}</button>
+ </form>
+ <p class="small muted mt">{{ t('not_reported_note') }}</p>
+</section>
+<div class="grid g3">
+ <a class="card result" href="/report"><h2>{{ ico('flag') }} {{ t('report_cta') }}</h2><p class="muted mb0">Tell us about a number, link, email, payment request or message so others can check it.</p></a>
+ <a class="card result" href="/analyse"><h2>{{ ico('spark') }} {{ t('analyse_cta') }}</h2><p class="muted mb0">Paste a message to see which warning signs it shows and why. It is a guide, not proof.</p></a>
+ <a class="card result" href="/search"><h2>{{ ico('list') }} Browse reports</h2><p class="muted mb0">See recently reported and verified indicators with safety advice.</p></a>
+</div>
+<section aria-labelledby="vw" class="mt">
+ <h2 id="vw">{{ t('verified_title') }}</h2>
+ {% if verified %}<ul class="list card">{% for i in verified %}<li><a href="/i/{{ i.id }}" class="row between"><span><b class="mask">{{ i.value }}</b><br><span class="small muted">{{ type_label(i.type) }} · {{ cat_label(i.risk_category) }}</span></span><span>{{ status_chip(i) }}</span></a></li>{% endfor %}</ul>
+ {% else %}<div class="empty">{{ ico('shield') }}<p>No verified warnings yet. Reports are reviewed by moderators before they are published.</p></div>{% endif %}
+</section>
+<section aria-labelledby="tips" class="mt card">
+ <h2 id="tips">Stay safe</h2>
+ <ul>{% for a in advice %}<li>{{ a }}</li>{% endfor %}</ul>
+</section>
+{% endblock %}

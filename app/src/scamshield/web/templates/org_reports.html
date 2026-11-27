@@ -1,0 +1,6 @@
+{% extends 'base.html' %}{% from 'macros.html' import ico, type_label with context %}
+{% block title %}Our reports{% endblock %}
+{% block content %}
+<h1>Reports submitted by your organisation</h1><p class="muted">Raw evidence is visible only for reports your organisation submitted.</p>
+<div class="tbl-wrap">{% if reps %}<table class="cards"><thead><tr><th>Reference</th><th>Type</th><th>Status</th><th>Received</th></tr></thead><tbody>{% for r in reps %}<tr><td data-l="Reference"><a href="/org/reports/{{ r.id }}" class="mono">{{ r.ref }}</a></td><td data-l="Type">{{ type_label(r.itype) }}</td><td data-l="Status">{{ r.status|replace('_',' ') }}</td><td data-l="Received">{{ r.created_at.date() }}</td></tr>{% endfor %}</tbody></table>{% else %}<div class="empty">{{ ico('list') }}<p>Your organisation has not submitted reports yet. Use <a href="/report">Report</a> or the API.</p></div>{% endif %}</div>
+{% endblock %}

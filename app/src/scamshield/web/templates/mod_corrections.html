@@ -1,0 +1,17 @@
+{% extends 'base.html' %}{% from 'macros.html' import ico, csrf_field with context %}
+{% block title %}Corrections{% endblock %}
+{% block content %}
+<h1>Correction requests</h1>
+<p class="muted">Acknowledged immediately. Target decision within {{ settings.correction_sla_days }} days. Urgent legal requests are flagged to platform administrators.</p>
+{% if not items %}<div class="empty">{{ ico('check') }}<p>No correction requests.</p></div>{% endif %}
+<div class="stack">{% for it in items %}{% set c = it.c %}
+<article class="card"><div class="row between"><h2 class="mb0 mono">{{ c.ref }}</h2><span class="row"><span class="chip {{ 'disputed' if c.status == 'open' else 'verified' if c.status == 'accepted' else 'unverified' }}">{{ c.status }}</span>{% if c.urgent_legal %}<span class="chip high">Urgent legal</span>{% endif %}{% if it.overdue %}<span class="chip high">Overdue</span>{% endif %}</span></div>
+ <p>Indicator <a href="/i/{{ c.indicator_id }}">#{{ c.indicator_id }}</a> · {{ c.relationship_ }} · due {{ c.due_at.date() }}</p>
+ <p style="white-space:pre-wrap">{{ c.explanation }}</p>
+ {% if c.status == 'open' %}<form method="post" action="/mod/corrections/{{ c.id }}/decide" class="stack">{{ csrf_field() }}
+  <div class="field"><label for="r{{ c.id }}">Reason (required)</label><input id="r{{ c.id }}" name="reason" type="text" required minlength="8"></div>
+  <div class="table-actions"><button class="btn" name="decision" value="accept" type="submit">Accept (soften record)</button><button class="btn secondary" name="decision" value="decline" type="submit">Decline</button>
+  {% if role == 'platform_admin' %}<button class="btn danger" name="decision" value="remove" type="submit">Remove data (irreversible)</button>{% endif %}</div></form>
+ {% else %}<p class="small muted">Decision: {{ c.decision_reason }}</p>{% endif %}
+</article>{% endfor %}</div>
+{% endblock %}

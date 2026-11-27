@@ -1,0 +1,10 @@
+{
+ "nav_check": "Angalia", "nav_report": "Ripoti", "nav_analyse": "Changanua", "nav_mine": "Ripoti zangu", "nav_signin": "Ingia", "nav_alerts": "Arifa",
+ "h1_home": "Angalia kabla ya kulipa au kujibu.",
+ "sub_home": "Tafuta namba ya simu, tovuti, barua pepe au kumbukumbu ya malipo uliyotumiwa. Tunaonyesha kile wengine wameripoti na ushahidi uliopo.",
+ "search": "Tafuta", "ph_search": "Namba, kiungo, barua pepe au till", "q_search": "Unataka kuangalia nini?",
+ "verified_title": "Maonyo yaliyothibitishwa", "report_cta": "Ripoti utapeli", "analyse_cta": "Changanua ujumbe",
+ "not_reported_note": "Kutokuripotiwa hakumaanishi ni salama.",
+ "skip": "Ruka hadi maudhui makuu", "demo_banner": "Data ya maonyesho ya majaribio. Rekodi hizi ni za kubuni, si matukio halisi.",
+ "sw_draft_note": "Tafsiri ya Kiswahili ni rasimu — inahitaji ukaguzi wa mzungumzaji asilia (draft — needs native review)."
+}

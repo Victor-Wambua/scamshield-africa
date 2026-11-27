@@ -1,0 +1,13 @@
+{% extends 'base.html' %}{% from 'macros.html' import ico, csrf_field with context %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<h1>Profile and settings</h1>
+<form method="post" action="/settings" class="card stack">{{ csrf_field() }}<h2>Profile</h2>
+ <div class="field"><label for="display_name">Name</label><input id="display_name" name="display_name" type="text" maxlength="120" value="{{ user.display_name }}"></div>
+ <div class="field"><label for="email_ro">Email</label><input id="email_ro" type="email" value="{{ user.email }}" readonly></div>
+ <div class="field"><label for="language">Language</label><select id="language" name="language"><option value="en" {% if user.language == 'en' %}selected{% endif %}>English</option><option value="sw" {% if user.language == 'sw' %}selected{% endif %}>Kiswahili (draft — needs native review)</option></select></div>
+ <button class="btn" type="submit">Save</button></form>
+<section class="card mt"><h2>Security</h2><p>Role: <b>{{ user.role|replace('_',' ') }}</b>. Second step (authenticator): {% if mfa_required %}<b>{{ 'enabled' if user.totp_enabled else 'required, not set up' }}</b>{% else %}not required for your role{% endif %}.</p></section>
+<section class="card mt"><h2>Your data</h2><p><a class="btn secondary" href="/settings/export">Download my data (JSON)</a></p>
+ <details><summary>Delete my account</summary><form method="post" action="/settings/delete" class="stack mt">{{ csrf_field() }}<p class="small">Your account is removed and your contact details erased. Reports you sent stay in anonymous form so independent-report counts remain correct.</p><div class="field"><label for="reason">Reason</label><input id="reason" name="reason" type="text" required minlength="8"></div><label class="check"><input type="checkbox" name="confirm" value="1" required><span>I understand this cannot be undone.</span></label><button class="btn danger" type="submit">Delete my account</button></form></details></section>
+{% endblock %}

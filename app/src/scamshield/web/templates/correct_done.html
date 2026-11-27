@@ -1,0 +1,6 @@
+{% extends 'base.html' %}{% from 'macros.html' import ico with context %}
+{% block title %}Request received{% endblock %}
+{% block content %}
+<div class="verdict med">{{ ico('flag') }}<div><h1 class="mb0">Correction request received</h1><p class="mb0">Your reference is <b class="mono">{{ ref }}</b>. The record is marked as disputed while we review it. Target decision: {{ due }}.</p></div></div>
+<div class="btn-row mt"><a class="btn" href="/">Back to check</a></div>
+{% endblock %}
