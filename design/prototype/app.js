@@ -79,8 +79,8 @@ function shell(){
   $('#shell').className='shell'+(staff?' has-side':'');
   $('#shell').innerHTML=`
   <a class="skip" href="#main" data-skip>Skip to main content</a>
-  <div class="demo-bar" role="region" aria-label="Prototype controls"><span><strong>Simulated — design prototype.</strong> All data is synthetic demonstration data. Nothing is sent anywhere.</span>
-   <span class="row" style="gap:8px"><label for="role" style="margin:0;font-weight:600">Viewing as</label><select id="role">${Object.entries(SS.roles).map(([k,v])=>`<option value="${k}" ${k===ST.role?'selected':''}>${v}</option>`).join('')}</select><button type="button" data-act="reset">Reset demo</button></span></div>
+  <div class="demo-bar" role="region" aria-label="Prototype controls"><span class="demo-note"><strong>Simulated — design prototype.</strong><span class="long"> All data is synthetic demonstration data. Nothing is sent anywhere.</span></span>
+   <span class="row" style="gap:8px"><label for="role">Viewing as</label><select id="role">${Object.entries(SS.roles).map(([k,v])=>`<option value="${k}" ${k===ST.role?'selected':''}>${v}</option>`).join('')}</select><button type="button" data-act="reset">Reset demo</button></span></div>
   <header class="topbar"><a class="brand" href="#/">${logo()}<span>ScamShield<small>Africa · Kenya pilot</small></span></a>
    <nav class="nav-desktop" aria-label="Main">${links}</nav><span class="spacer"></span>
    <button class="icon-btn" data-act="theme" aria-label="Switch light or dark theme">${ico('moon')}</button>

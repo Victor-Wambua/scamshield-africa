@@ -179,3 +179,12 @@ pre.code{background:#0F1C1A;color:#DCEFEA;padding:var(--sp-4);border-radius:var(
 .evid{aspect-ratio:4/3;border:2px dashed var(--line);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;text-align:center;font-size:var(--fs-xs);color:var(--ink-2);background:var(--surface-2);padding:6px}
 .badge-n{display:inline-block;min-width:22px;padding:0 6px;border-radius:var(--r-pill);background:var(--accent);color:var(--accent-ink);font-size:.75rem;font-weight:800;text-align:center}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition:none!important;scroll-behavior:auto!important}.skel{animation:none}}
+/* refinements */
+.demo-bar label{display:inline;margin:0;font-weight:600;white-space:nowrap}.demo-bar button{white-space:nowrap}
+.demo-bar .row{flex-wrap:nowrap}
+.demo-bar .demo-note{flex:1 1 260px}
+@media(max-width:599px){.demo-bar{padding:6px 12px}.demo-bar .demo-note .long{display:none}}
+h1[tabindex="-1"]:focus,main:focus{outline:none}
+summary{list-style:none}summary::-webkit-details-marker{display:none}
+summary::before{content:"\25B8";margin-right:8px;color:var(--brand);display:inline-block;transition:transform var(--dur)}
+details[open]>summary::before{transform:rotate(90deg)}

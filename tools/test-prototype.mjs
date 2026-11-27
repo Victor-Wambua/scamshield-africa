@@ -9,11 +9,11 @@ const txt=()=>p.locator('#main').innerText();
 await p.goto(URL);await p.waitForSelector('h1');
 ok('home loads with simulated banner',(await p.locator('.demo-bar').innerText()).includes('Simulated — design prototype'));
 // search
-await p.fill('#q','0700 000 101');await p.click('button[type=submit]');await p.waitForSelector('.result');
+await p.fill('#q','0700 000 101');await p.click('button[type=submit]');await p.waitForSelector('#results[aria-busy="false"] .result');
 ok('search finds verified record',(await txt()).includes('Verified with evidence'));
-await p.fill('#q','0799 123 456');await p.click('button[type=submit]');await p.waitForSelector('.empty');
+await p.fill('#q','0799 123 456');await p.click('button[type=submit]');await p.waitForSelector('#results[aria-busy="false"] .empty');
 ok('not-reported state says not safe',(await txt()).includes('Not reported does not mean safe'));
-await p.goto(URL+'#/search?q=a&status=verified');await p.waitForSelector('.result');ok('filter by status',(await p.locator('.result').count())>0);
+await p.goto(URL+'#/search?q=a&status=verified');await p.waitForSelector('#results[aria-busy="false"] .result');ok('filter by status',(await p.locator('.result').count())>0);
 await p.goto(URL+'#/search?q=simulate%20error');await p.waitForSelector('.notice.err');ok('search error state',true);
 // detail
 await p.goto(URL+'#/i/I-1001');await p.waitForSelector('.verdict');
