@@ -188,3 +188,4 @@ h1[tabindex="-1"]:focus,main:focus{outline:none}
 summary{list-style:none}summary::-webkit-details-marker{display:none}
 summary::before{content:"\25B8";margin-right:8px;color:var(--brand);display:inline-block;transition:transform var(--dur)}
 details[open]>summary::before{transform:rotate(90deg)}
+[hidden]{display:none!important}

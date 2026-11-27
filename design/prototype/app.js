@@ -57,10 +57,10 @@ SS.confirmDlg=confirmDlg;
 const NAV={
  visitor:[['/','nav_check','search'],['/report','nav_report','flag'],['/analyse','nav_analyse','spark'],['/login','nav_signin','user']],
  reporter:[['/','nav_check','search'],['/report','nav_report','flag'],['/analyse','nav_analyse','spark'],['/mine','nav_mine','list'],['/notifications','Alerts','bell']],
- moderator:[['/mod','Queue','queue'],['/mod/corrections','Corrections','flag'],['/audit','Audit log','log'],['/','Public check','search'],['/notifications','Alerts','bell']],
- analyst:[['/org','Dashboard','chart'],['/org/campaigns','Campaigns','spark'],['/org/cases','Cases','case'],['/org/exports','Exports','download'],['/org/alerts','Alert rules','bell'],['/','Public check','search']],
- developer:[['/dev','Keys','key'],['/dev/docs','API docs','code'],['/dev/usage','Usage','chart'],['/dev/try','Try a request','search'],['/','Public check','search']],
- admin:[['/admin','Users','users'],['/admin/roles','Roles','lock'],['/audit','Audit log','log'],['/mod','Moderation','queue'],['/','Public check','search']]
+ moderator:[['/mod','Queue','queue'],['/mod/corrections','Corrections','flag'],['/audit','Audit log','log'],['/','Check','search'],['/notifications','Alerts','bell']],
+ analyst:[['/org','Dashboard','chart'],['/org/campaigns','Campaigns','spark'],['/org/cases','Cases','case'],['/org/exports','Exports','download'],['/org/alerts','Alert rules','bell'],['/','Check','search']],
+ developer:[['/dev','Keys','key'],['/dev/docs','API docs','code'],['/dev/usage','Usage','chart'],['/dev/try','Try a request','search'],['/','Check','search']],
+ admin:[['/admin','Users','users'],['/admin/roles','Roles','lock'],['/audit','Audit log','log'],['/mod','Moderation','queue'],['/','Check','search']]
 };
 const ROUTE_ROLES={'/mine':['reporter'],'/notifications':['reporter','moderator','analyst','developer','admin'],'/settings':['reporter','moderator','analyst','developer','admin'],'/mod':['moderator','admin'],'/org':['analyst'],'/dev':['developer'],'/admin':['admin'],'/audit':['moderator','admin']};
 function allowed(path){for(const k of Object.keys(ROUTE_ROLES))if(path===k||path.startsWith(k+'/'))return ROUTE_ROLES[k].includes(ST.role);return true}

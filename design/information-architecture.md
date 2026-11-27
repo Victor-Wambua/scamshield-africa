@@ -35,11 +35,11 @@ Utility
 |---|---|
 | Visitor | Check, Report, Analyse, Sign in |
 | Registered reporter / Verified contributor | Check, Report, Analyse, My reports, Alerts |
-| Moderator | Queue, Corrections, Audit log, Public check, Alerts |
-| Organization analyst | Dashboard, Campaigns, Cases, Exports, Alert rules, Public check |
+| Moderator | Queue, Corrections, Audit log, Check, Alerts |
+| Organization analyst | Dashboard, Campaigns, Cases, Exports, Alert rules, Check |
 | Organization administrator | Analyst navigation plus Users and API keys (design only; prototype folds into analyst and developer views) |
-| Developer (organization member) | Keys, Docs, Usage, Try, Public check |
-| Platform administrator | Users, Roles, Audit log, Moderation, Public check |
+| Developer (organization member) | Keys, Docs, Usage, Try, Check |
+| Platform administrator | Users, Roles, Audit log, Moderation, Check |
 
 Public roles use a top nav on desktop and a bottom tab bar on mobile. Staff roles use a left sidebar on desktop (at 900px and up) and the bottom tab bar on mobile. Account menu: profile, notifications, language, "How we label things", sign out. Role gating shows an explanatory "restricted" page, never a blank 404.
 
