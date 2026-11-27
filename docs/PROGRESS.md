@@ -26,3 +26,6 @@ Blocked / external dependencies:
 Tests run (counts, results):
 Open questions for founder:
 ```
+
+## Phase B (build), 2026-11-27
+Built the application in `app/`: schema + migrations, rules engine, services, web UI from the design tokens, API, seed, evaluation, tests (278 + 6 e2e), scans, docs, deployment templates. See `docs/ACCEPTANCE-REPORT.md`. Not pushed, not deployed.

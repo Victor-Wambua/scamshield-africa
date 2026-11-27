@@ -2,7 +2,7 @@
 
 Product 1 of 10 in the product studio. An independent fraud-intelligence network for Kenya first: check a phone number, link, email, payment reference or wallet; report what you saw; let institutions investigate campaigns. It records reports about indicators and is not a public accusation list.
 
-**Status: design phase only.** This repository contains the complete design package and a clickable prototype. There is no backend or application code. All demo data is synthetic demonstration data.
+**Status: Phase B MVP built locally** (`app/`), not deployed. The design package and prototype remain in `design/`. All demo data is synthetic. Run: `cd app && uv sync --all-groups && export SS_DATABASE_URL=sqlite:///./data/dev.db && uv run python -m scamshield migrate && uv run python -m scamshield seed && uv run python -m scamshield serve --port 4300`. Tests: `uv run pytest` and `uv run pytest -m e2e e2e`. Docs in `docs/`.
 
 ## Open the prototype
 ```
