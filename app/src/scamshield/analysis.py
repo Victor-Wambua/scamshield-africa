@@ -19,7 +19,7 @@ ENGINE_VERSION = "rules-1.0"
 LABELS = ("several_warning_signs", "some_warning_signs", "few_warning_signs")
 # Thresholds tuned on the DEV split of the synthetic set only (evaluation/README.md)
 T_SEVERAL = 0.60
-T_SOME = 0.25
+T_SOME = 0.30
 
 OFFICIAL_DOMAINS = {
     "safaricom": ("safaricom.co.ke", "safaricom.com"),
@@ -39,15 +39,17 @@ ORG_WORDS = re.compile(
     r"(?i)\b(safaricom|m-?pesa|kcb|equity|co-?op(?:erative)? bank|ncba|kra|ecitizen|e-citizen|nssf|sha\b|airtel|absa|stanbic|dtb|central bank|huduma|ntsa)\b"
 )
 
+WARNING_NEGATION = re.compile(r"(?i)(do not|don't|never|will never|usi)\s*(share|ask|shiriki)|usishiriki|never ask")
+
 SIGNALS: dict[str, tuple[float, re.Pattern[str], str]] = {
     "urgency": (
-        0.20,
+        0.15,
         re.compile(r"(?i)\b(urgent(ly)?|immediately|within \d+ ?(hours?|hrs|minutes|mins)|last chance|act (now|fast)|expires?|haraka|sasa hivi|mara moja|today only)\b"),
         "Pressure to act quickly. Genuine organisations rarely demand instant action.",
     ),
     "payment_request": (
-        0.30,
-        re.compile(r"(?i)\b(send (me )?(ksh|kes|money|cash)|pay (a |the )?(fee|ksh|kes)|deposit (ksh|kes|first)|till (number|no)|paybill|tuma (pesa|ksh)|lipa)\b"),
+        0.25,
+        re.compile(r"(?i)\b(send (me )?(ksh|kes|money|cash)|pay (a |the )?(fee|ksh|kes)|deposit (ksh|kes|first)|(pay|send|tuma|lipa)\b.{0,40}\b(till|paybill)|tuma (pesa|ksh))\b"),
         "Asks you to send or pay money.",
     ),
     "reversal_story": (
@@ -57,7 +59,7 @@ SIGNALS: dict[str, tuple[float, re.Pattern[str], str]] = {
     ),
     "prize": (
         0.40,
-        re.compile(r"(?i)\b(you (have )?won|congratulations|winner|lottery|jackpot|umeshinda|zawadi|free (gift|airtime|data))\b"),
+        re.compile(r"(?i)\b(you (have )?won|winner|lottery|jackpot|umeshinda|zawadi|free (gift|airtime|data))\b"),
         "Claims you won a prize you did not enter for.",
     ),
     "credential_request": (
@@ -188,6 +190,8 @@ def analyse_message(
 
     for key, (w, pat, why) in SIGNALS.items():
         ms = list(pat.finditer(text))
+        if key == "credential_request" and WARNING_NEGATION.search(text):
+            continue  # "never share your PIN" is a safety warning, not a request
         if not ms:
             continue
         kinds.add(key)

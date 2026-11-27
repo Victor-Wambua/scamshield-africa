@@ -1,0 +1,7 @@
+dev: n=89 precision=1.000 recall=1.000 f1=1.000 accuracy=1.000 tp=50 fp=0 fn=0 tn=39
+test: n=89 precision=1.000 recall=1.000 f1=1.000 accuracy=1.000 tp=51 fp=0 fn=0 tn=38
+  test confusion (true, engine label): {"benign|few_warning_signs": 38, "suspicious|several_warning_signs": 20, "suspicious|some_warning_signs": 31}
+holdout: n=40 precision=0.952 recall=1.000 f1=0.976 accuracy=0.975 tp=20 fp=1 fn=0 tn=19
+  holdout error: hold-38 true=benign predicted_label=some_warning_signs: Please confirm your account details by visiting the nearest branch with your ID;
+  holdout confusion (true, engine label): {"benign|few_warning_signs": 19, "benign|some_warning_signs": 1, "suspicious|several_warning_signs": 9, "suspicious|some_warning_signs": 11}
+all: n=218 precision=0.992 recall=1.000 f1=0.996 accuracy=0.995 tp=121 fp=1 fn=0 tn=96
