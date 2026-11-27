@@ -4,11 +4,11 @@
 <h1>{{ 'Results' if q else 'Browse reports' }}</h1>
 <form action="/search" method="get" role="search" class="stack">
  <div class="searchbox"><label for="q" class="sr-only">{{ t('q_search') }}</label><input id="q" name="q" type="search" value="{{ q }}" maxlength="600" placeholder="{{ t('ph_search') }}" autocomplete="off"><button class="btn" type="submit">{{ ico('search') }}{{ t('search') }}</button></div>
- <div class="row">
+ <details class="filters"{% if type or status or category %} open{% endif %}><summary>Filters</summary><div class="row">
   <div><label for="type">Type</label><select id="type" name="type"><option value="">All types</option>{% for k in ['phone','url','email','wallet','social','payment_ref','business','message'] %}<option value="{{ k }}" {% if k == type %}selected{% endif %}>{{ type_label(k) }}</option>{% endfor %}</select></div>
   <div><label for="status">Status</label><select id="status" name="status"><option value="">Any</option><option value="verified" {% if status == 'verified' %}selected{% endif %}>Verified with evidence</option><option value="unverified" {% if status == 'unverified' %}selected{% endif %}>Reported, not verified</option></select></div>
   <div><label for="category">Category</label><select id="category" name="category"><option value="">Any</option>{% for k in categories %}<option value="{{ k }}" {% if k == category %}selected{% endif %}>{{ cat_label(k) }}</option>{% endfor %}</select></div>
- </div>
+ </div></details>
 </form>
 {% if error %}<div class="notice warn mt" role="alert">{{ error }}</div>{% endif %}
 {% if q %}
@@ -21,6 +21,7 @@
   </a>{% endfor %}</div>
  {% elif not error %}
  <div class="empty mt">{{ ico('search') }}<h2>No published record found</h2><p>{{ t('not_reported_note') }} A new scam may not be reported yet. Be careful if anything feels wrong.</p>
+  <ul class="steps-list"><li>Do not send money or share a PIN or code.</li><li>Call the organisation on a number from its official website.</li><li>Paste the message into the analyser to see warning signs.</li></ul>
   <div class="btn-row" style="justify-content:center"><a class="btn" href="/report">{{ t('report_cta') }}</a><a class="btn secondary" href="/analyse">{{ t('analyse_cta') }}</a></div></div>
  {% endif %}
 {% else %}

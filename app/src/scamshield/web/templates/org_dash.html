@@ -1,15 +1,16 @@
 {% extends 'base.html' %}{% from 'macros.html' import ico, kpi as kpi_card, bars, cat_label, type_label with context %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
+{% set cat_rows = [] %}{% for k, n in d.by_category %}{% set _ = cat_rows.append((cat_label(k), n)) %}{% endfor %}{% set type_rows = [] %}{% for k, n in d.by_type %}{% set _ = type_rows.append((type_label(k), n)) %}{% endfor %}
 <h1>{{ org.name if org else 'Institution' }} dashboard</h1>
-<form method="get" action="/org" class="row"><label for="days" class="mb0">Range</label><select id="days" name="days" onchange="this.form.submit()">{% for n in [7,30,90] %}<option value="{{ n }}" {% if d.days == n %}selected{% endif %}>Last {{ n }} days</option>{% endfor %}</select><noscript><button class="btn sm" type="submit">Apply</button></noscript></form>
+<form method="get" action="/org" class="row"><label for="days" class="mb0">Range</label><select id="days" name="days" data-autosubmit>{% for n in [7,30,90] %}<option value="{{ n }}" {% if d.days == n %}selected{% endif %}>Last {{ n }} days</option>{% endfor %}</select><noscript><button class="btn sm" type="submit">Apply</button></noscript></form>
 <div class="grid g4 mt">{{ kpi_card('Reports received (your organisation)', d.total) }}{{ kpi_card('Open cases', d.open_cases) }}{{ kpi_card('Categories seen', d.by_category|length) }}{{ kpi_card('Status groups', d.by_status|length) }}</div>
 <div class="grid g2 mt">
  <section class="card"><h2>Reports per day</h2>
   <svg class="chart chart-line" viewBox="0 0 {{ w }} {{ h }}" role="img" aria-label="Reports per day over the last {{ d.days }} days, peak {{ mx }}"><line class="grid" x1="0" y1="{{ h - 5 }}" x2="{{ w }}" y2="{{ h - 5 }}"/><polyline points="{{ line }}"/><text x="4" y="14">peak {{ mx }}</text></svg>
   <table class="sr-only"><caption>Reports per day</caption>{% for day, n in d.series %}<tr><td>{{ day }}</td><td>{{ n }}</td></tr>{% endfor %}</table></section>
- <section class="card"><h2>Threat categories</h2>{% if d.by_category %}{{ bars(d.by_category) }}{% else %}<p class="muted">No reports in this range.</p>{% endif %}</section>
- <section class="card"><h2>Indicator types</h2>{% if d.by_type %}{{ bars(d.by_type) }}{% else %}<p class="muted">No data.</p>{% endif %}</section>
+ <section class="card"><h2>Threat categories</h2>{% if d.by_category %}{{ bars(cat_rows) }}{% else %}<p class="muted">No reports in this range.</p>{% endif %}</section>
+ <section class="card"><h2>Indicator types</h2>{% if d.by_type %}{{ bars(type_rows) }}{% else %}<p class="muted">No data.</p>{% endif %}</section>
  <section class="card"><h2>Counties</h2><p class="small muted">Counts under {{ d.suppression_threshold }} are hidden to protect privacy.</p>{% if d.geo %}{{ bars(d.geo) }}{% else %}<p class="muted">No data.</p>{% endif %}</section>
 </div>
 <section class="card mt"><h2>Network trend: newly verified indicators</h2>{% if trends.verified_by_category %}{{ bars(trends.verified_by_category) }}{% else %}<p class="muted">None in this range.</p>{% endif %}<p class="small muted">Aggregate across the network. No individual reports are shown here.</p></section>

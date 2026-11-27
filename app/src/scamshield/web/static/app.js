@@ -79,4 +79,14 @@
   document.querySelectorAll('[data-close]').forEach(function (b) {
     b.addEventListener('click', function () { var d = b.closest('dialog'); if (d) d.close(); });
   });
+
+  // Auto-submit selects (replaces inline handlers, which the CSP blocks)
+  document.querySelectorAll('select[data-autosubmit]').forEach(function (sel) {
+    sel.addEventListener('change', function () { if (sel.form) sel.form.submit(); });
+  });
+
+  // Confirm destructive actions
+  document.querySelectorAll('[data-confirm]').forEach(function (b) {
+    b.addEventListener('click', function (e) { if (!window.confirm(b.getAttribute('data-confirm'))) e.preventDefault(); });
+  });
 })();

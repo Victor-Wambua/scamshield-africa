@@ -14,3 +14,9 @@ details.card summary{cursor:pointer;font-weight:700}
 .secret{font-family:var(--font-mono);font-size:var(--fs-md);word-break:break-all;padding:var(--sp-3);background:var(--surface-2);border-radius:var(--r-sm)}
 img.evidence{max-width:100%;height:auto;border-radius:var(--r-sm);border:1px solid var(--line)}
 .qr svg{width:180px;height:180px;background:#fff;padding:8px;border-radius:var(--r-sm)}
+.urgent{border-left:6px solid var(--risk-high,#b3261e)}
+details.filters{margin:var(--sp-3) 0}
+details.filters summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center}
+.steps-list{text-align:left;max-width:32rem;margin:var(--sp-3) auto}
+.chart-line text{font-size:12px;fill:var(--ink)}
+.btn,.icon-btn{min-height:44px}

@@ -8,6 +8,8 @@
  <p class="mb0">{% if i.status == 'verified' and not i.disputed %}A moderator confirmed this indicator and it is backed by {{ 'several independent reporters' if i.independent_reports >= settings.verify_min_independent else 'primary evidence' }}.{% else %}This is not proof of fraud. It records what others have reported.{% endif %} {{ t('not_reported_note') }}</p></div></div>
 <div class="grid g-main mt">
  <div class="stack">
+  <section class="card"><h2>What to do</h2><p>{{ advice }}</p><ul>{% for a in general %}<li>{{ a }}</li>{% endfor %}</ul></section>
+  <section class="card urgent" aria-labelledby="sent"><h2 id="sent">Already sent money or shared a PIN?</h2><p>Call your mobile-money provider or bank now, using the number on their official website or the back of your card, and ask them to block or reverse the transaction. Then report it to the police.</p></section>
   <section class="card"><h2>Record</h2>
    <dl class="kv">
     <dt>Type</dt><dd>{{ type_label(i.type) }}</dd>
@@ -34,7 +36,6 @@
   </section>
  </div>
  <aside class="stack">
-  <section class="card"><h2>What to do</h2><p>{{ advice }}</p><ul>{% for a in general %}<li>{{ a }}</li>{% endfor %}</ul></section>
   <section class="card"><h2>Think this is wrong?</h2><p class="small">You can ask us to review or correct this record. We acknowledge right away and aim to decide within {{ settings.correction_sla_days }} days.</p><a class="btn secondary block" href="/correct/{{ i.id }}">Request a correction</a></section>
   <a class="btn block" href="/report">{{ ico('flag') }}Report this or something similar</a>
  </aside>

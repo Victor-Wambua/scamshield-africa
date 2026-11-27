@@ -3,6 +3,7 @@
 {% block content %}
 <p><a href="/mod">&larr; Queue</a></p>
 <h1>Review {{ r.ref }}</h1>
+<p class="small"><a href="#decision">Jump to decision</a></p>
 <div class="row"><span class="chip review">{{ r.status|replace('_',' ')|capitalize }}</span><span class="chip {{ 'verified' if ind.status == 'verified' else 'unverified' }}">Indicator: {{ ind.status }}{{ ' (disputed)' if ind.flagged else '' }}</span>{% if not r.counts_independent %}<span class="chip med">Same reporter or device as an earlier report</span>{% endif %}<span class="chip none">Origin: {{ r.origin }}</span></div>
 <div class="grid g-main mt">
 <div class="stack">
@@ -21,7 +22,7 @@
 </div>
 <aside class="stack">
  <section class="card"><h2>Indicator</h2><dl class="kv"><dt>Independent reporters</dt><dd>{{ independent }} (accepted + this report)</dd><dt>Submissions</dt><dd>{{ ind.submission_count }}</dd><dt>Confidence</dt><dd>{{ (ind.confidence * 100)|round|int }}%</dd><dt>Evidence items</dt><dd>{{ ind.evidence_count }}</dd></dl><p><a href="/i/{{ ind.id }}">View public record</a></p></section>
- <section class="card"><h2>Decision</h2>
+ <section class="card" id="decision"><h2>Decision</h2>
   {% if not verify.allowed %}<p class="notice warn small">Verify is unavailable: {{ verify.reason }}.</p>{% else %}<p class="notice ok small">Can verify: {{ verify.reason }}.</p>{% endif %}
   <form method="post" action="/mod/{{ r.id }}/decide" enctype="multipart/form-data" class="stack">{{ csrf_field() }}
    <div class="field"><label for="reason">Reason (required, 8+ characters, recorded in the audit log)</label><textarea id="reason" name="reason" required minlength="8" rows="3"></textarea></div>
@@ -34,8 +35,8 @@
     <button class="btn secondary" name="action" value="request_evidence" type="submit">Request evidence</button>
     <button class="btn secondary" name="action" value="attach_evidence" type="submit">Attach evidence</button>
     <button class="btn secondary" name="action" value="merge" type="submit">Merge as duplicate</button>
-    <button class="btn danger" name="action" value="reject" type="submit">Reject</button>
-    <button class="btn danger" name="action" value="restrict_reporter" type="submit">Restrict reporter</button>
+    <button class="btn danger" name="action" value="reject" type="submit" data-confirm="Reject this report? The reporter is told it was not accepted.">Reject</button>
+    <button class="btn danger" name="action" value="restrict_reporter" type="submit" data-confirm="Restrict this reporter? They will not be able to submit further reports.">Restrict reporter</button>
    </div>
   </form></section>
 </aside></div>

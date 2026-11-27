@@ -233,3 +233,16 @@ def test_demo_banner_only_when_synthetic_data_present(app, db, settings, make):
     db.commit()
     app.state.reset_demo_flag()
     assert "Synthetic demonstration data" in TestClient(app).get("/").text
+
+
+def test_templates_have_no_inline_event_handlers_and_urgent_help_is_shown(client):
+    from pathlib import Path
+
+    import scamshield
+
+    tpl = Path(scamshield.__file__).parent / "web" / "templates"
+    for f in tpl.glob("*.html"):
+        assert not re.search(r"\son[a-z]+=\"", f.read_text()), f.name
+    home = client.get("/").text
+    assert "Already sent money?" in home
+    assert "No published record found" in client.get("/search?q=0799123456").text
