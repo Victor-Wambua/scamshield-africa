@@ -15,7 +15,6 @@ from starlette.datastructures import FormData
 
 from .. import accounts
 from ..config import Settings
-from ..db import Database
 from ..i18n import pick_language, translate
 from ..models import Indicator, Session, User
 from ..permissions import can
@@ -60,7 +59,7 @@ class Ctx:
 
     @property
     def client_bucket(self) -> str:
-        ip = self.request.client.host if self.request.client else "0.0.0.0"  # noqa: S104
+        ip = self.request.client.host if self.request.client else "unknown"
         return device_bucket(self.settings.secret_key, ip, self.request.headers.get("user-agent", ""))
 
     @property

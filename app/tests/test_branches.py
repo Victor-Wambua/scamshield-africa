@@ -4,11 +4,11 @@ import io
 from pathlib import Path
 
 import pytest
+from helpers import png_bytes, submit
 from PIL import Image
 from sqlalchemy import select
 
-from helpers import png_bytes, submit
-from scamshield import cli, moderation, uploads
+from scamshield import cli, uploads
 from scamshield.config import set_settings
 from scamshield.corrections import decide_correction, submit_correction
 from scamshield.models import Indicator, Report, User

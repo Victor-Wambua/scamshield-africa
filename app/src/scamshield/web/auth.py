@@ -10,6 +10,7 @@ import segno
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import HTMLResponse, Response
 from sqlalchemy import select
+from starlette.datastructures import UploadFile
 
 from .. import accounts, audit, ratelimit
 from ..models import AlertSubscription, Evidence, Notification, NotificationPref, Report
@@ -232,7 +233,7 @@ async def add_evidence(rid: int, ctx: Ctx = Depends(ctx_dep)) -> Response:
     if r is None or r.reporter_id != user.id:
         raise HTTPException(status_code=404)
     f = form.get("evidence")
-    if r.status != "awaiting_evidence" or not hasattr(f, "read"):
+    if r.status != "awaiting_evidence" or not isinstance(f, UploadFile):
         return ctx.redirect("/mine")
     try:
         sf = store_image(ctx.settings.storage_dir, await f.read(ctx.settings.max_upload_bytes + 1), ctx.settings.max_upload_bytes, ctx.settings.max_image_pixels)

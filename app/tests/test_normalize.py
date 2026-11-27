@@ -1,9 +1,21 @@
 import pytest
 
 from scamshield.normalize import (
-    InvalidIndicator, canonical_text, detect_type, extract_phones, extract_urls, mask_value, normalize,
-    normalize_business, normalize_email, normalize_message, normalize_payment_ref, normalize_phone, normalize_social,
-    normalize_url, normalize_wallet,
+    InvalidIndicator,
+    canonical_text,
+    detect_type,
+    extract_phones,
+    extract_urls,
+    mask_value,
+    normalize,
+    normalize_business,
+    normalize_email,
+    normalize_message,
+    normalize_payment_ref,
+    normalize_phone,
+    normalize_social,
+    normalize_url,
+    normalize_wallet,
 )
 
 

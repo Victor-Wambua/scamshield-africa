@@ -4,8 +4,18 @@ import pytest
 
 from scamshield.permissions import PERMISSIONS, can
 from scamshield.rules import (
-    ReportFact, VerifyPolicy, confidence_level, confidence_score, correction_due, correction_overdue,
-    evaluate_verification, independent_count, is_independent_of_existing, public_status_label, risk_banner, suppress_small,
+    ReportFact,
+    VerifyPolicy,
+    confidence_level,
+    confidence_score,
+    correction_due,
+    correction_overdue,
+    evaluate_verification,
+    independent_count,
+    is_independent_of_existing,
+    public_status_label,
+    risk_banner,
+    suppress_small,
 )
 
 F = ReportFact

@@ -14,7 +14,7 @@ from . import audit, mailer
 from .analysis import AnalysisContext, Prior, analyse_message
 from .config import Settings
 from .models import CATEGORIES, INDICATOR_TYPES, Evidence, Indicator, Report, ReviewEvent, User, utcnow
-from .normalize import InvalidIndicator, detect_type, mask_value, normalize
+from .normalize import InvalidIndicator, mask_value, normalize
 from .rules import (
     ReportFact,
     VerifyPolicy,

@@ -9,7 +9,7 @@ from __future__ import annotations
 from sqlalchemy import Select, select
 from sqlalchemy.orm import Session
 
-from .models import ApiKey, AlertSubscription, Case, CaseIndicator, CaseNote, Evidence, Report, utcnow
+from .models import AlertSubscription, ApiKey, Case, CaseIndicator, CaseNote, Evidence, Report, utcnow
 
 
 class TenantViolation(PermissionError):
@@ -24,7 +24,7 @@ class TenantScope:
         self.org_id = org_id
 
     # --- reports owned by this org (raw evidence visible only here, Decision 2) ---
-    def reports(self) -> Select[tuple[Report]]:
+    def reports(self) -> Select[Report]:
         return select(Report).where(Report.owning_org_id == self.org_id)
 
     def report(self, report_id: int) -> Report:
@@ -43,7 +43,7 @@ class TenantScope:
         return ev
 
     # --- cases ---
-    def cases(self) -> Select[tuple[Case]]:
+    def cases(self) -> Select[Case]:
         return select(Case).where(Case.org_id == self.org_id)
 
     def case(self, case_id: int) -> Case:
@@ -87,7 +87,7 @@ class TenantScope:
         return c
 
     # --- API keys ---
-    def keys(self) -> Select[tuple[ApiKey]]:
+    def keys(self) -> Select[ApiKey]:
         return select(ApiKey).where(ApiKey.org_id == self.org_id)
 
     def key(self, key_id: int) -> ApiKey:
@@ -103,7 +103,7 @@ class TenantScope:
         return k
 
     # --- alert subscriptions ---
-    def alerts(self) -> Select[tuple[AlertSubscription]]:
+    def alerts(self) -> Select[AlertSubscription]:
         return select(AlertSubscription).where(AlertSubscription.org_id == self.org_id)
 
     def alert(self, alert_id: int) -> AlertSubscription:

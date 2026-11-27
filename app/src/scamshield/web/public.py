@@ -10,6 +10,7 @@ from urllib.parse import urlparse
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse, RedirectResponse, Response
 from sqlalchemy import select, text
+from starlette.datastructures import UploadFile
 
 from .. import ratelimit
 from ..analysis import analyse_message
@@ -17,7 +18,18 @@ from ..corrections import CorrectionInvalid, submit_correction
 from ..models import CATEGORIES, Evidence, Indicator, Report
 from ..orgs import COUNTIES
 from ..permissions import can
-from ..reports import GENERAL_ADVICE, SAFETY_ADVICE, ReportInvalid, SubmitInput, analysis_context, browse, exact_lookup, history, public_view, submit_report
+from ..reports import (
+    GENERAL_ADVICE,
+    SAFETY_ADVICE,
+    ReportInvalid,
+    SubmitInput,
+    analysis_context,
+    browse,
+    exact_lookup,
+    history,
+    public_view,
+    submit_report,
+)
 from ..security import csrf_for
 from ..tenancy import TenantScope, TenantViolation
 from ..uploads import path_for
@@ -132,7 +144,7 @@ async def report_submit(ctx: Ctx = Depends(ctx_dep)) -> Response:
             errors["amount_kes"] = "Enter a whole number of shillings."
     files = []
     for f in form.getlist("evidence"):
-        if hasattr(f, "read") and getattr(f, "filename", ""):
+        if isinstance(f, UploadFile) and f.filename:
             files.append(await f.read(ctx.settings.max_upload_bytes + 1))
     inp = SubmitInput(
         itype=values["itype"], value=values["value"], description=values["description"], category=values["category"],

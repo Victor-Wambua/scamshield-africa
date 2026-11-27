@@ -25,7 +25,7 @@ from .security import encrypt_field, new_totp_secret
 from .tenancy import TenantScope
 
 ORIGIN = "synthetic test data"
-DEMO_PASSWORD = "DemoPass-2026x"  # noqa: S105 - synthetic demo accounts only
+DEMO_PASSWORD = "DemoPass-2026x"  # noqa: S105  # nosec B105
 
 
 def _png(label: str) -> bytes:

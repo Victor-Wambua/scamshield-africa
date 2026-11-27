@@ -1,14 +1,22 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
 import pytest
+from helpers import DESC, png_bytes, submit
 from sqlalchemy import select
 
-from helpers import DESC, png_bytes, submit
 from scamshield import audit
 from scamshield.models import AuditLog, Evidence, Indicator, Notification, Report, ReviewEvent, User
 from scamshield.moderation import ModerationError, decide
 from scamshield.reports import (
-    ReportInvalid, SubmitInput, browse, candidate_types, exact_lookup, history, message_priors, public_view, submit_report, validate_input,
+    ReportInvalid,
+    SubmitInput,
+    browse,
+    candidate_types,
+    exact_lookup,
+    history,
+    message_priors,
+    public_view,
+    validate_input,
 )
 
 

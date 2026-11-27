@@ -109,7 +109,7 @@ class Item:
 
 
 def build_dataset(seed: int = 2026, variants: int = 5) -> list[Item]:
-    rnd = random.Random(seed)  # noqa: S311 - deterministic data generation, not security
+    rnd = random.Random(seed)  # noqa: S311  # nosec B311
     items: list[Item] = []
     for label, bank in (("suspicious", SCAM), ("benign", LEGIT)):
         for base_id, group, tpl in bank:

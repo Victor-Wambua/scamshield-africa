@@ -1,11 +1,10 @@
 import re
 
-import pytest
+from conftest import csrf_of, login, post
 from fastapi.testclient import TestClient
+from helpers import png_bytes, submit
 from sqlalchemy import select
 
-from conftest import csrf_of, login, post
-from helpers import png_bytes, submit
 from scamshield.models import Correction, Indicator, Report
 from scamshield.moderation import decide
 

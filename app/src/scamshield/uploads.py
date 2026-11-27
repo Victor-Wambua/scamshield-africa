@@ -58,10 +58,10 @@ def process_image(data: bytes, max_bytes: int, max_pixels: int) -> tuple[bytes, 
                 raise UploadRejected("The image dimensions are too large.")
             probe.verify()
         with Image.open(io.BytesIO(data)) as img:
-            img = ImageOps.exif_transpose(img)
-            fmt_png = img.mode in ("RGBA", "LA", "P") or mime == "image/png"
-            mode = img.mode if (fmt_png and img.mode in ("RGB", "RGBA", "L", "LA")) else ("RGBA" if fmt_png else "RGB")
-            clean = Image.frombytes(mode, img.size, img.convert(mode).tobytes())  # fresh pixels: drops EXIF/ICC/text chunks
+            oriented = ImageOps.exif_transpose(img) or img
+            fmt_png = oriented.mode in ("RGBA", "LA", "P") or mime == "image/png"
+            mode = oriented.mode if (fmt_png and oriented.mode in ("RGB", "RGBA", "L", "LA")) else ("RGBA" if fmt_png else "RGB")
+            clean = Image.frombytes(mode, oriented.size, oriented.convert(mode).tobytes())  # fresh pixels: drops EXIF/ICC/text chunks
             out = io.BytesIO()
             if fmt_png:
                 clean.save(out, format="PNG")

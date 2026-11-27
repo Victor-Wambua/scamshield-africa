@@ -2,12 +2,30 @@ from datetime import timedelta
 
 import pyotp
 import pytest
+from helpers import png_bytes, submit
 from sqlalchemy import select
 
-from helpers import png_bytes, submit
 from scamshield import accounts, notify, orgs
-from scamshield.corrections import CorrectionError, CorrectionInvalid, decide_correction, queue, submit_correction
-from scamshield.models import AlertSubscription, ApiUsage, AuditLog, Correction, Evidence, Indicator, MailOutbox, Notification, Report, Session, User, utcnow
+from scamshield.corrections import (
+    CorrectionError,
+    CorrectionInvalid,
+    decide_correction,
+    queue,
+    submit_correction,
+)
+from scamshield.models import (
+    AlertSubscription,
+    ApiUsage,
+    AuditLog,
+    Correction,
+    Evidence,
+    Indicator,
+    MailOutbox,
+    Notification,
+    Report,
+    Session,
+    utcnow,
+)
 from scamshield.moderation import decide
 from scamshield.reports import exact_lookup
 from scamshield.tenancy import TenantScope

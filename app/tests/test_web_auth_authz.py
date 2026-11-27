@@ -2,12 +2,22 @@ import re
 
 import pyotp
 import pytest
+from conftest import PASSWORD, csrf_of, login, post
 from fastapi.testclient import TestClient
+from helpers import png_bytes, submit
 from sqlalchemy import select
 
-from conftest import PASSWORD, csrf_of, login, post
-from helpers import png_bytes, submit
-from scamshield.models import AlertSubscription, ApiKey, AuditLog, Case, CaseNote, Evidence, Indicator, Notification, Report, Session, User
+from scamshield.models import (
+    AlertSubscription,
+    ApiKey,
+    AuditLog,
+    Case,
+    CaseNote,
+    Evidence,
+    Report,
+    Session,
+    User,
+)
 from scamshield.moderation import decide
 
 ROLES = ["anonymous", "reporter", "contributor", "moderator", "org_analyst", "org_admin", "platform_admin"]
@@ -269,7 +279,7 @@ def test_role_change_forces_reauthentication(app, make, db):
     u, _ = make.user()
     ca, cu = login(app, admin, asec), login(app, u)
     assert cu.get("/settings").status_code == 200
-    r = post(ca, "/admin/users/%d/role" % u.id, {"role": "moderator", "reason": "promoted for review duties"}, form_path="/admin")
+    r = post(ca, f"/admin/users/{u.id}/role", {"role": "moderator", "reason": "promoted for review duties"}, form_path="/admin")
     assert r.status_code == 200 and "must sign in again" in r.text
     assert cu.get("/settings").status_code == 401
     log = db.scalar(select(AuditLog).where(AuditLog.action == "user.role_changed"))

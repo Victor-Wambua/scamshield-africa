@@ -5,9 +5,9 @@ from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
+from helpers import png_bytes, submit
 from sqlalchemy import create_engine, inspect, select
 
-from helpers import png_bytes, submit
 from scamshield import orgs
 from scamshield.db import Base
 from scamshield.models import ApiKey, ApiUsage, Indicator, Report

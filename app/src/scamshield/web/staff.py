@@ -10,10 +10,12 @@ from typing import Any
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import HTMLResponse, Response
 from sqlalchemy import func, or_, select
+from starlette.datastructures import UploadFile
 
 from .. import accounts, audit
-from ..corrections import CorrectionError, decide_correction, queue as correction_queue
-from ..models import AuditLog, Correction, Evidence, Indicator, Organisation, Report, ReviewEvent, User, ROLES
+from ..corrections import CorrectionError, decide_correction
+from ..corrections import queue as correction_queue
+from ..models import ROLES, AuditLog, Correction, Evidence, Indicator, Organisation, Report, ReviewEvent, User
 from ..moderation import ModerationError, decide
 from ..permissions import PERMISSIONS
 from ..reports import COUNTED, history, message_priors, policy_of
@@ -43,7 +45,8 @@ def queue(ctx: Ctx = Depends(ctx_dep), f: str = "needs", q: str = "") -> Respons
     corr = db.scalar(select(func.count()).select_from(Correction).where(Correction.status == "open")) or 0
     firsts: dict[int, Any] = {}
     for rid, ts in db.execute(select(ReviewEvent.report_id, func.min(ReviewEvent.created_at)).where(ReviewEvent.report_id.is_not(None)).group_by(ReviewEvent.report_id)):
-        firsts[rid] = ts
+        if rid is not None:
+            firsts[rid] = ts
     hrs = [(firsts[r.id] - r.created_at).total_seconds() / 3600 for r in db.scalars(select(Report)) if r.id in firsts]
     med = f"{median(hrs):.1f} h" if hrs else "None yet"
     rows = [{"r": r, "ev": ev_counts.get(r.id, 0), "same": not r.counts_independent, "dup": r.duplicate_of_id is not None} for r in reps]
@@ -104,7 +107,7 @@ async def review_decide(rid: int, ctx: Ctx = Depends(ctx_dep)) -> Response:
     user = ctx.need("moderation.decide")
     data = None
     f = form.get("file")
-    if hasattr(f, "read") and getattr(f, "filename", ""):
+    if isinstance(f, UploadFile) and f.filename:
         data = await f.read(ctx.settings.max_upload_bytes + 1)
     target = form.get("target_indicator_id")
     try:
@@ -167,7 +170,7 @@ async def admin_role(uid: int, ctx: Ctx = Depends(ctx_dep)) -> Response:
         ctx.flash.append(("err", "Choose a valid role and give a reason of at least 8 characters."))
     elif u.id == admin.id:
         ctx.flash.append(("err", "You cannot change your own role."))
-    elif role in ("org_analyst", "org_admin") and not (org_raw.isdigit() and ctx.db.get(Organisation, int(org_raw))):
+    elif role in ("org_analyst", "org_admin") and (not org_raw.isdigit() or ctx.db.get(Organisation, int(org_raw)) is None):
         ctx.flash.append(("err", "Organisation roles need an organisation."))
     else:
         old = u.role
