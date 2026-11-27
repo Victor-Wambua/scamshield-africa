@@ -182,7 +182,7 @@ def start_password_reset(db: DbSession, email: str) -> str | None:
 def reset_password(db: DbSession, token: str, new_password: str) -> User:
     pr = db.scalar(select(PasswordReset).where(PasswordReset.token_hash == token_id(token)))
     if pr is None or pr.used_at is not None or pr.expires_at < utcnow():
-        raise AccountError({"token": "This reset link is invalid or has expired."})
+        raise AccountError({"token": "This reset link is invalid or has expired."})  # nosec B105
     probs = password_problems(new_password)
     if probs:
         raise AccountError({"password": "Password needs " + ", ".join(probs) + "."})
