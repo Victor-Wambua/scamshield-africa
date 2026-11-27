@@ -10,7 +10,7 @@ Reviewer: the design author, so this is a self-review. A founder or independent 
 | Palette contrast (`tools/contrast.mjs`) | 42 text/non-text pairs across light and dark, all pass (lowest text ratio 5.43:1) |
 | Accessibility script (`tools/a11y-check.mjs`) | 23 of 23 routes pass labels/names/h1/main/duplicate-id checks; keyboard focus ring visible on 13 of 14 Tab stops (the other was the document body) |
 | Horizontal scroll at 375px (home) | None (scroll width 375) |
-| Screenshots | 64 PNG (16 screens x desktop/mobile x light/dark), plus a gallery capture, in `design/screenshots/`; 12 wireframe PNG sheets; viewed and fixed: demo bar height, focus ring on headings, hidden error messages being visible, empty "Signals" label, wrapped tab label |
+| Screenshots | 64 PNG (16 screens x desktop/mobile x light/dark), plus a gallery capture, in `design/screenshots/`; 12 wireframe PNG sheets; viewed and fixed: demo bar height, focus ring on headings, hidden error messages being visible, wrapped tab label |
 | Not run | Manual screen-reader test, real-device Android test, user testing, Safari/Firefox, slow-network test, legal review |
 
 ## 2. Requirements A-I
@@ -51,7 +51,8 @@ Also: challenge/correct (done), visible audit trails (staff view), MFA for privi
 7. The analyser's compare step only matches exact numbers and domains.
 8. Wireframes are generated from a script (`tools/build-wireframes.mjs`), so they are consistent but stylised.
 9. The hi-fi gallery uses iframes at half scale for overview; open each file for full size.
-10. Text-size and zoom to 200% were designed for but not tested in a browser.
+10. On mobile queue cards an empty "Signals:" label shows when a report has no signals (cosmetic, not fixed).
+11. Text-size and zoom to 200% were designed for but not tested in a browser.
 
 ## 5. Open questions for the founder
 1. Verification rule: is "2 independent reporters plus 1 checked evidence item, or an authorised source" right? Should verified contributors count with a higher weight, and by how much?
