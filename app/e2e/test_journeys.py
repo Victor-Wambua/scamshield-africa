@@ -6,7 +6,6 @@ import time
 import httpx
 import pyotp
 import pytest
-
 from conftest import BASE, PASSWORD
 
 pytestmark = pytest.mark.e2e

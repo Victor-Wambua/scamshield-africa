@@ -49,6 +49,7 @@ ignore = ["S101", "B008", "E501"]  # E501: long lines accepted (no formatter enf
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S"]
 "evaluation/*" = ["S"]
+"e2e/*" = ["S"]
 
 [tool.mypy]
 python_version = "3.12"

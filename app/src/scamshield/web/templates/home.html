@@ -11,18 +11,21 @@
  </form>
  <p class="small muted mt">{{ t('not_reported_note') }}</p>
 </section>
-<div class="grid g3">
- <a class="card result" href="/report"><h2>{{ ico('flag') }} {{ t('report_cta') }}</h2><p class="muted mb0">Tell us about a number, link, email, payment request or message so others can check it.</p></a>
- <a class="card result" href="/analyse"><h2>{{ ico('spark') }} {{ t('analyse_cta') }}</h2><p class="muted mb0">Paste a message to see which warning signs it shows and why. It is a guide, not proof.</p></a>
- <a class="card result" href="/search"><h2>{{ ico('list') }} Browse reports</h2><p class="muted mb0">See recently reported and verified indicators with safety advice.</p></a>
+{% if demo %}<p class="small muted mt">Try <a href="/search?q=0700000001"><span class="mono">0700 000 001</span></a> &nbsp; <a href="/search?q=safaricom-bonus.example.test/claim"><span class="mono">safaricom-bonus.example.test</span></a> &nbsp; <span class="chip demo">Synthetic demonstration data</span></p>{% endif %}
+<div class="grid g3 mt">
+ <a class="card result" href="/report"><h2>{{ ico('flag') }}<br>{{ t('report_cta') }}</h2><p class="muted mb0">Takes about 3 minutes. Works on a slow connection.</p></a>
+ <a class="card result" href="/analyse"><h2>{{ ico('spark') }}<br>{{ t('analyse_cta') }}</h2><p class="muted mb0">Paste an SMS or chat and see the warning signs, with reasons.</p></a>
+ <a class="card result" href="/about"><h2>{{ ico('shield') }}<br>How we label things</h2><p class="muted mb0">Reported, unverified, or verified with evidence. Never an accusation.</p></a>
 </div>
-<section aria-labelledby="vw" class="mt">
+<div class="grid g-main mt">
+<section aria-labelledby="vw">
  <h2 id="vw">{{ t('verified_title') }}</h2>
- {% if verified %}<ul class="list card">{% for i in verified %}<li><a href="/i/{{ i.id }}" class="row between"><span><b class="mask">{{ i.value }}</b><br><span class="small muted">{{ type_label(i.type) }} · {{ cat_label(i.risk_category) }}</span></span><span>{{ status_chip(i) }}</span></a></li>{% endfor %}</ul>
+ {% if verified %}<div class="stack">{% for i in verified %}<a class="result" href="/i/{{ i.id }}">
+  <div class="row between"><b class="mask">{{ ico({'phone':'phone','url':'link','email':'mail','wallet':'wallet'}.get(i.type,'info'),'ico-sm') }} {{ i.value }}</b>{{ status_chip(i) }}</div>
+  <p class="small muted mb0 mt">{{ type_label(i.type) }} · {{ cat_label(i.risk_category) }} · {{ i.independent_reports }} independent report{{ '' if i.independent_reports == 1 else 's' }} · updated {{ i.last_updated }}</p></a>{% endfor %}</div>
+ <p class="mt"><a href="/search">Browse all reported indicators</a></p>
  {% else %}<div class="empty">{{ ico('shield') }}<p>No verified warnings yet. Reports are reviewed by moderators before they are published.</p></div>{% endif %}
 </section>
-<section aria-labelledby="tips" class="mt card">
- <h2 id="tips">Stay safe</h2>
- <ul>{% for a in advice %}<li>{{ a }}</li>{% endfor %}</ul>
-</section>
+<aside><section aria-labelledby="tips" class="card"><h2 id="tips">Stay safe</h2><ul>{% for a in advice %}<li>{{ a }}</li>{% endfor %}</ul></section></aside>
+</div>
 {% endblock %}

@@ -1,0 +1,18 @@
+# Written but never pushed or run in GitHub Actions. Local equivalents were executed (docs/ACCEPTANCE-REPORT.md).
+name: ci
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: app } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync --all-groups
+      - run: uv run ruff check src tests e2e evaluation migrations
+      - run: uv run mypy src
+      - run: uv run pytest --cov=scamshield --cov-branch --cov-report=term
+      - run: uv run bandit -c pyproject.toml -r src
+      - run: uv run pip-audit --skip-editable
+      - run: uv run playwright install chromium --with-deps
+      - run: CHROME= uv run pytest -m e2e e2e

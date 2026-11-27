@@ -1,0 +1,18 @@
+# NOT RUN on the development machine (no Docker/Postgres available). Staging template.
+services:
+  db:
+    image: postgres:16
+    environment: { POSTGRES_DB: scamshield, POSTGRES_USER: scamshield, POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:?set in .env}" }
+    volumes: [ "pgdata:/var/lib/postgresql/data" ]
+  app:
+    build: .
+    depends_on: [ db ]
+    environment:
+      SS_ENV: staging
+      SS_SECRET_KEY: "${SS_SECRET_KEY:?set in .env}"
+      SS_COOKIE_SECURE: "true"
+      SS_DATABASE_URL: "postgresql+psycopg://scamshield:${POSTGRES_PASSWORD}@db/scamshield"
+      SS_STORAGE_DIR: /srv/data/evidence
+    volumes: [ "evidence:/srv/data" ]
+    ports: [ "127.0.0.1:8000:8000" ]
+volumes: { pgdata: {}, evidence: {} }
