@@ -60,8 +60,8 @@ def process_image(data: bytes, max_bytes: int, max_pixels: int) -> tuple[bytes, 
         with Image.open(io.BytesIO(data)) as img:
             img = ImageOps.exif_transpose(img)
             fmt_png = img.mode in ("RGBA", "LA", "P") or mime == "image/png"
-            clean = Image.new(img.mode if fmt_png else "RGB", img.size)
-            clean.putdata(list(img.convert(clean.mode).getdata()))  # drops EXIF/ICC/text chunks
+            mode = img.mode if (fmt_png and img.mode in ("RGB", "RGBA", "L", "LA")) else ("RGBA" if fmt_png else "RGB")
+            clean = Image.frombytes(mode, img.size, img.convert(mode).tobytes())  # fresh pixels: drops EXIF/ICC/text chunks
             out = io.BytesIO()
             if fmt_png:
                 clean.save(out, format="PNG")

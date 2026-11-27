@@ -15,14 +15,16 @@ import idna
 TRACKING_PARAMS = ("utm_", "fbclid", "gclid", "mc_", "ref_src")
 _PHONE_KE = re.compile(r"^(?:\+?254|0)([17]\d{8})$")
 _PHONE_INTL = re.compile(r"^\+(\d{8,15})$")
-_EMAIL = re.compile(r"^[A-Za-z0-9._%+\-']{1,64}@([A-Za-z0-9\-\.]+\.[A-Za-z]{2,}|xn--[A-Za-z0-9\-\.]+)$")
+_EMAIL = re.compile(r"^[A-Za-z0-9._%+\-']{1,64}@([^\s@]+\.[^\s@]{2,})$")
 _WALLET = re.compile(r"^[A-Za-z0-9]{26,95}$")
 _ETH = re.compile(r"^0x[0-9a-fA-F]{40}$")
 _HOST = re.compile(r"^(?=.{1,253}$)([a-z0-9](?:[a-z0-9\-]{0,61}[a-z0-9])?\.)+[a-z0-9\-]{2,63}$")
 _IPV4 = re.compile(r"^\d{1,3}(\.\d{1,3}){3}$")
 _PAYREF = re.compile(r"^[A-Z0-9]{4,30}$")
 _HANDLE = re.compile(r"^@?([A-Za-z0-9_.]{3,40})$")
-URL_IN_TEXT = re.compile(r"(?i)\b((?:https?://)?(?:[a-z0-9\-]+\.)+[a-z]{2,}(?:/[^\s<>\"']*)?)")
+URL_IN_TEXT = re.compile(
+    r"(?i)\b((?:https?://)?(?:[a-z0-9\-]+\.)+[a-z]{2,}(?:/[^\s<>\"']*)?|https?://\d{1,3}(?:\.\d{1,3}){3}(?::\d+)?(?:/[^\s<>\"']*)?)"
+)
 PHONE_IN_TEXT = re.compile(r"(?<![\d])(?:\+?254|0)[\s\-]?[17](?:[\s\-]?\d){8}(?!\d)")
 
 
