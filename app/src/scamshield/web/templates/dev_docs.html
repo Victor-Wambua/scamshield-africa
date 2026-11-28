@@ -2,7 +2,7 @@
 {% block title %}API docs{% endblock %}
 {% block content %}
 <h1>API documentation</h1>
-<p>Interactive OpenAPI documentation: <a href="/docs">/docs</a> (Swagger UI, served locally) and <a href="/openapi.json">/openapi.json</a>.</p>
+<p>Interactive OpenAPI documentation: <a href="/docs">/docs</a> (Swagger UI, served locally) and <a href="/openapi.json">/openapi.json</a>. The explorer is third-party software with known accessibility gaps (small targets, nested controls); this page and the schema file give the same information in plain form.</p>
 <div class="stack">
 <section class="card"><h2>Authentication and limits</h2><p>Send <code>Authorization: Bearer ssk_...</code>. Keys are scoped (<code>lookup</code>, <code>report</code>, <code>intel</code>, <code>analytics</code>) and belong to one organisation. Default limit {{ settings.api_rate_per_minute }} requests per minute per key; over the limit returns 429 with <code>Retry-After</code>.</p></section>
 <section class="card"><h2>Endpoints</h2><ul>
@@ -11,7 +11,7 @@
 <li><code>GET /api/v1/reports/{ref}/status</code> scope report (your organisation's reports only)</li>
 <li><code>GET /api/v1/threat-intel?category=...</code> scope intel</li>
 <li><code>GET /api/v1/org/analytics?days=30</code> scope analytics</li></ul>
-<pre class="code">curl -H "Authorization: Bearer $SS_KEY" \
+<pre tabindex="0" class="code">curl -H "Authorization: Bearer $SS_KEY" \
   "https://staging.example/api/v1/indicators/lookup?value=%2B254700000001"</pre>
 <p class="small muted">Errors: 401 invalid or revoked key, 403 missing scope, 404 not found, 422 invalid input, 429 rate limited.</p></section></div>
 {% endblock %}

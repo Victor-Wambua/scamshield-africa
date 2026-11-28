@@ -7,7 +7,7 @@ from pathlib import Path
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse, RedirectResponse, Response
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
@@ -57,8 +57,10 @@ def create_app(settings: Settings | None = None, database: Database | None = Non
         from fastapi.openapi.docs import get_swagger_ui_html
 
         r = get_swagger_ui_html(openapi_url="/openapi.json", title="ScamShield Africa API", swagger_js_url="/static/swagger/swagger-ui-bundle.js", swagger_css_url="/static/swagger/swagger-ui.css")
-        r.headers["Content-Security-Policy"] = DOCS_CSP
-        return r
+        body = bytes(r.body).replace(b"<html>", b'<html lang="en">', 1)
+        out = HTMLResponse(body)
+        out.headers["Content-Security-Policy"] = DOCS_CSP
+        return out
 
     @app.middleware("http")
     async def secure(request: Request, call_next: Callable[[Request], Awaitable[Response]]) -> Response:

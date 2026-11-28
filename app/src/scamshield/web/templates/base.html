@@ -16,7 +16,6 @@
 <div class="shell{% if staff %} has-side{% endif %}">
 <a class="skip" href="#main">{{ t('skip') }}</a>
 {% if demo %}<div class="demo-bar" role="region" aria-label="Data notice"><span class="demo-note"><strong>Synthetic demonstration data.</strong><span class="long"> Records here are made up for demonstration and are not real incidents.</span></span></div>{% endif %}
-{% if lang == 'sw' %}<div class="notice info" role="note">{{ t('sw_draft_note') }}</div>{% endif %}
 <header class="topbar">
  <a class="brand" href="/">{{ logo() }}<span>ScamShield<small>Africa · Kenya pilot</small></span></a>
  <nav class="nav-desktop" aria-label="Main">{% for href, label, ic in nav %}<a href="{{ href }}" {% if path == href or (href != '/' and path.startswith(href + '/')) %}aria-current="page"{% endif %}>{{ ico(ic,'ico-sm') }}{{ t(label) if label.startswith('nav_') else label }}</a>{% endfor %}</nav>
@@ -33,6 +32,7 @@
 <div class="main">
  {% if staff %}<nav class="side" aria-label="Section">{% for href, label, ic in nav %}<a href="{{ href }}" {% if path == href or (href != '/' and path.startswith(href + '/')) %}aria-current="page"{% endif %}>{{ ico(ic,'ico-sm') }}{{ t(label) if label.startswith('nav_') else label }}</a>{% endfor %}</nav>{% endif %}
  <div class="view"><main id="main" tabindex="-1">
+ {% if lang == 'sw' %}<div class="notice info" role="note">{{ t('sw_draft_note') }}</div>{% endif %}
  {% for kind, msg in flash %}<div class="notice {{ kind }}" role="status">{{ msg }}</div>{% endfor %}
  {% block content %}{% endblock %}
  </main></div>

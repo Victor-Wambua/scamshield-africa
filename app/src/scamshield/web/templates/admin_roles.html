@@ -2,6 +2,6 @@
 {% block title %}Roles{% endblock %}
 {% block content %}
 <h1>Roles and permissions</h1><p class="muted">Read-only. This is the permission table the application enforces and the authorisation tests check.</p>
-<div class="tbl-wrap"><table><thead><tr><th>Permission</th>{% for r in roles %}<th>{{ r|replace('_',' ') }}</th>{% endfor %}</tr></thead><tbody>
+<div class="tbl-wrap" role="region" aria-label="Permission table (scrolls sideways on small screens)" tabindex="0"><table><thead><tr><th>Permission</th>{% for r in roles %}<th>{{ r|replace('_',' ') }}</th>{% endfor %}</tr></thead><tbody>
 {% for p in perms %}<tr><td class="mono">{{ p }}</td>{% for r in roles %}<td>{{ 'Yes' if p in matrix[r] else '—' }}</td>{% endfor %}</tr>{% endfor %}</tbody></table></div>
 {% endblock %}

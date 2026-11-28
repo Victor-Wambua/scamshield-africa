@@ -37,11 +37,12 @@
     var bar = document.querySelectorAll('.stepper li');
     var i = 0;
     var hasErr = wiz.querySelector('[aria-invalid="true"]');
-    var show = function (n) {
+    var show = function (n, moved) {
       i = n;
       steps.forEach(function (s, k) { s.hidden = k !== n; });
       bar.forEach(function (b, k) { b.className = k < n ? 'done' : k === n ? 'now' : ''; });
-      var h = steps[n].querySelector('h2'); if (h) { h.tabIndex = -1; h.focus(); }
+      var lab = document.querySelector('[data-step-label]'); if (lab) { lab.hidden = false; lab.textContent = 'Step ' + (n + 1) + ' of ' + steps.length; }
+      var h = steps[n].querySelector('h2'); if (h && moved) { h.tabIndex = -1; h.focus(); }
       var back = wiz.querySelector('[data-back]'), next = wiz.querySelector('[data-next]'), sub = wiz.querySelector('[data-submit]');
       back.hidden = n === 0; next.hidden = n === steps.length - 1; sub.hidden = n !== steps.length - 1;
     };
@@ -50,8 +51,8 @@
       steps[n].querySelectorAll('[required]').forEach(function (el) { if (!el.checkValidity()) { ok = false; el.reportValidity(); } });
       return ok;
     };
-    wiz.querySelector('[data-next]').addEventListener('click', function () { if (valid(i)) show(i + 1); });
-    wiz.querySelector('[data-back]').addEventListener('click', function () { show(i - 1); });
+    wiz.querySelector('[data-next]').addEventListener('click', function () { if (valid(i)) show(i + 1, true); });
+    wiz.querySelector('[data-back]').addEventListener('click', function () { show(i - 1, true); });
     wiz.noValidate = false;
     if (!hasErr) show(0); else { steps.forEach(function (s) { s.hidden = false; }); wiz.querySelector('.step-nav').hidden = true; wiz.querySelector('[data-submit-all]').hidden = false; }
     var rev = document.getElementById('review-box');
@@ -84,6 +85,11 @@
   document.querySelectorAll('select[data-autosubmit]').forEach(function (sel) {
     sel.addEventListener('change', function () { if (sel.form) sel.form.submit(); });
   });
+
+  // Grouped actions: open on wide screens, collapsed on phones (still reachable, no change to the form)
+  if (window.matchMedia && window.matchMedia('(min-width: 900px)').matches) {
+    document.querySelectorAll('details[data-open-wide]').forEach(function (d) { d.open = true; });
+  }
 
   // Confirm destructive actions
   document.querySelectorAll('[data-confirm]').forEach(function (b) {

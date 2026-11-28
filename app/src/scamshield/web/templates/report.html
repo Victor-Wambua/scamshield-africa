@@ -4,6 +4,7 @@
 <h1>Report a scam</h1>
 <p class="muted">Reports are reviewed by moderators before anything is published. We record reports about numbers, links and messages. We do not publish accusations about people.</p>
 <ol class="stepper" aria-label="Progress">{% for n in range(5) %}<li></li>{% endfor %}</ol>
+<p class="small muted" data-step-label aria-live="polite" hidden></p>
 {{ error_summary(errors) }}
 <form method="post" action="/report" enctype="multipart/form-data" data-wizard novalidate class="stack" id="report-form">
  {{ csrf_field() }}
