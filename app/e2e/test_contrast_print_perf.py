@@ -100,7 +100,8 @@ def test_print_media_is_a_plain_document(env):
             hidden = page.evaluate("['.topbar','.tabbar','.side','.demo-bar'].every(s => { const e = document.querySelector(s); return !e || getComputedStyle(e).display === 'none'; })")
             assert hidden, f"navigation chrome shows when printing {path}"
             assert page.evaluate("getComputedStyle(document.body).backgroundColor") == "rgb(255, 255, 255)"
-            assert page.evaluate("document.documentElement.scrollWidth <= innerWidth + 1"), f"horizontal overflow in print layout {path}"
+            over = page.evaluate("[...document.body.querySelectorAll('*')].filter(e => e.getBoundingClientRect().right > innerWidth + 1).slice(0, 5).map(e => e.tagName + '.' + e.className)")
+            assert page.evaluate("document.documentElement.scrollWidth <= innerWidth + 1"), f"horizontal overflow in print layout {path}: {over}"
             assert page.evaluate("getComputedStyle(document.querySelector('main'), '::before').content").startswith('"ScamShield Africa')
             pdf = page.pdf(format="A4")
             assert pdf[:4] == b"%PDF"

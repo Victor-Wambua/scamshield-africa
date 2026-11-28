@@ -40,6 +40,8 @@ pre.code:focus-visible,.tbl-wrap:focus-visible{outline-offset:-3px}
   .shell,.main,.has-side .main{display:block!important;max-width:none;padding:0}
   .card,.kpi,.result,.tbl-wrap,.verdict,.notice{box-shadow:none!important;background:#fff!important;color:#000!important;border:1px solid #666!important;break-inside:avoid}
   .tbl-wrap{overflow:visible!important}
+  table,table.cards{table-layout:fixed;width:100%}
+  th,td,.mono,pre.code,dd,p,li{overflow-wrap:anywhere;word-break:break-word}
   th{position:static!important;background:#eee!important;color:#000!important}
   a{color:#000!important;text-decoration:underline}
   pre.code{background:#fff!important;color:#000!important;border:1px solid #666;white-space:pre-wrap;overflow:visible}
