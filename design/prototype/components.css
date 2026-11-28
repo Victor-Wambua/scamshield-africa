@@ -189,3 +189,11 @@ summary{list-style:none}summary::-webkit-details-marker{display:none}
 summary::before{content:"\25B8";margin-right:8px;color:var(--brand);display:inline-block;transition:transform var(--dur)}
 details[open]>summary::before{transform:rotate(90deg)}
 [hidden]{display:none!important}
+
+/* UX review round 2 */
+.try-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.try-row .btn{min-height:44px}
+details.act-group{border:1px solid var(--line);border-radius:var(--r-md);padding:0 var(--sp-3);background:var(--surface-2);margin-top:var(--sp-3)}
+details.act-group>summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center}
+details.act-group[open]{padding-bottom:var(--sp-3)}
+details.danger-group{border-color:var(--risk-high)}
