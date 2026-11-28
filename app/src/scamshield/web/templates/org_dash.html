@@ -7,11 +7,12 @@
 <div class="grid g4 mt">{{ kpi_card('Reports received (your organisation)', d.total) }}{{ kpi_card('Open cases', d.open_cases) }}{{ kpi_card('Categories seen', d.by_category|length) }}{{ kpi_card('Status groups', d.by_status|length) }}</div>
 <div class="grid g2 mt">
  <section class="card"><h2>Reports per day</h2>
-  <svg class="chart chart-line" viewBox="0 0 {{ w }} {{ h }}" role="img" aria-label="Reports per day over the last {{ d.days }} days, peak {{ mx }}"><line class="grid" x1="0" y1="{{ h - 5 }}" x2="{{ w }}" y2="{{ h - 5 }}"/><polyline points="{{ line }}"/><text x="4" y="14">peak {{ mx }}</text></svg>
+  <svg class="chart chart-line" viewBox="0 0 {{ w }} {{ h }}" role="img" aria-label="Reports per day over the last {{ d.days }} days, peak {{ mx }}"><line class="grid" x1="0" y1="{{ h - 5 }}" x2="{{ w }}" y2="{{ h - 5 }}"/><polyline points="{{ line }}"/></svg>
+  {% set peak = (d.series|map(attribute=1)|list|max) if d.series else 0 %}<p class="chart-peak"><b>Busiest day:</b> {{ peak }} report{{ '' if peak == 1 else 's' }}</p>
   <table class="sr-only"><caption>Reports per day</caption>{% for day, n in d.series %}<tr><td>{{ day }}</td><td>{{ n }}</td></tr>{% endfor %}</table></section>
  <section class="card"><h2>Threat categories</h2>{% if d.by_category %}{{ bars(cat_rows) }}{% else %}<p class="muted">No reports in this range.</p>{% endif %}</section>
  <section class="card"><h2>Indicator types</h2>{% if d.by_type %}{{ bars(type_rows) }}{% else %}<p class="muted">No data.</p>{% endif %}</section>
  <section class="card"><h2>Counties</h2><p class="small muted">Counts under {{ d.suppression_threshold }} are hidden to protect privacy.</p>{% if d.geo %}{{ bars(d.geo) }}{% else %}<p class="muted">No data.</p>{% endif %}</section>
 </div>
-<section class="card mt"><h2>Network trend: newly verified indicators</h2>{% if trends.verified_by_category %}{{ bars(trends.verified_by_category) }}{% else %}<p class="muted">None in this range.</p>{% endif %}<p class="small muted">Aggregate across the network. No individual reports are shown here.</p></section>
+<section class="card mt"><h2>Network trend: newly verified indicators</h2>{% set tr_rows = [] %}{% for k, n in trends.verified_by_category %}{% set _ = tr_rows.append((cat_label(k), n)) %}{% endfor %}{% if trends.verified_by_category %}{{ bars(tr_rows) }}{% else %}<p class="muted">None in this range.</p>{% endif %}<p class="small muted">Aggregate across the network. No individual reports are shown here.</p></section>
 {% endblock %}

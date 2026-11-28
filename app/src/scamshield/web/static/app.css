@@ -20,3 +20,29 @@ details.filters summary{cursor:pointer;font-weight:700;min-height:44px;display:f
 .steps-list{text-align:left;max-width:32rem;margin:var(--sp-3) auto}
 .chart-line text{font-size:12px;fill:var(--ink)}
 .btn,.icon-btn{min-height:44px}
+.chart-peak{margin:var(--sp-2) 0 0;font-size:var(--fs-sm);color:var(--ink)}
+.chart-line text{display:none}
+.try{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-2) var(--sp-3)}
+.try-list{display:flex;flex-wrap:wrap;gap:var(--sp-2);list-style:none;margin:0;padding:0}
+.try-list a{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;border:1px solid var(--line);border-radius:var(--r-pill);background:var(--surface);text-decoration:none}
+.try-list .mono{word-break:normal;overflow-wrap:anywhere}
+details.act-group{border:1px solid var(--line);border-radius:var(--r-md);padding:0 var(--sp-3);background:var(--surface-2)}
+details.act-group>summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center}
+details.act-group[open]{padding-bottom:var(--sp-3)}
+details.danger-group{border-color:var(--risk-high)}
+pre.code:focus-visible,.tbl-wrap:focus-visible{outline-offset:-3px}
+@media(max-width:599px){.table-actions .btn{flex:1 1 100%}}
+/* Print: reports and exports read as plain documents */
+@media print{
+  :root{color-scheme:light}
+  body{background:#fff!important;color:#000!important;font-size:11pt}
+  .topbar,.tabbar,.side,.skip,.demo-bar,.menu,.nav-desktop,.step-nav,form.noprint,.noprint,[data-theme-toggle],.btn,.searchbox,details.filters>summary,.toast-wrap{display:none!important}
+  .shell,.main,.has-side .main{display:block!important;max-width:none;padding:0}
+  .card,.kpi,.result,.tbl-wrap,.verdict,.notice{box-shadow:none!important;background:#fff!important;color:#000!important;border:1px solid #666!important;break-inside:avoid}
+  .tbl-wrap{overflow:visible!important}
+  th{position:static!important;background:#eee!important;color:#000!important}
+  a{color:#000!important;text-decoration:underline}
+  pre.code{background:#fff!important;color:#000!important;border:1px solid #666;white-space:pre-wrap;overflow:visible}
+  .chart text{fill:#000!important}.chart-line polyline{stroke:#000}
+  main::before{content:"ScamShield Africa - printed record. Synthetic demonstration data where marked. Reported does not mean proven.";display:block;font-size:9pt;margin-bottom:8pt;border-bottom:1px solid #666;padding-bottom:4pt}
+}

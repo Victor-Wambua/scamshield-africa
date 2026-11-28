@@ -10,9 +10,9 @@
   <button class="btn" type="submit">{{ ico('search') }}{{ t('search') }}</button>
  </form>
  <p class="small muted mt">{{ t('not_reported_note') }}</p>
- <p class="notice warn mt"><b>Already sent money?</b> Call your mobile-money provider or bank straight away, then report to the police.</p>
+ <div class="notice warn mt" role="note"><p class="mb0"><b>Already sent money?</b> Call your mobile-money provider or bank straight away, then report to the police.</p></div>
 </section>
-{% if demo %}<p class="small muted mt">Try <a href="/search?q=0700000001"><span class="mono">0700 000 001</span></a> &nbsp; <a href="/search?q=safaricom-bonus.example.test/claim"><span class="mono">safaricom-bonus.example.test</span></a> &nbsp; <span class="chip demo">Synthetic demonstration data</span></p>{% endif %}
+{% if demo %}<div class="try mt"><span class="chip demo">Synthetic demonstration data</span><span class="small muted">Try a sample search:</span><ul class="try-list"><li><a href="/search?q=0700000001"><span class="mono">0700 000 001</span></a></li><li><a href="/search?q=safaricom-bonus.example.test/claim"><span class="mono">safaricom-bonus.example.test</span></a></li></ul></div>{% endif %}
 <div class="grid g3 mt">
  <a class="card result" href="/report"><h2>{{ ico('flag') }}<br>{{ t('report_cta') }}</h2><p class="muted mb0">Takes about 3 minutes. Works on a slow connection.</p></a>
  <a class="card result" href="/analyse"><h2>{{ ico('spark') }}<br>{{ t('analyse_cta') }}</h2><p class="muted mb0">Paste an SMS or chat and see the warning signs, with reasons.</p></a>
