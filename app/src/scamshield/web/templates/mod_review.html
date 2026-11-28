@@ -10,7 +10,7 @@
  <section class="card"><h2>Submitted</h2>
   <dl class="kv"><dt>Type</dt><dd>{{ type_label(r.itype) }}</dd><dt>Value</dt><dd class="mono">{{ r.raw_value }}</dd><dt>Normalised</dt><dd class="mono">{{ ind.norm_value }}</dd><dt>Category</dt><dd>{{ cat_label(r.category) }}</dd><dt>Reporter</dt><dd>{{ reporter_label }}</dd><dt>County</dt><dd>{{ r.county or 'Not given' }}</dd><dt>Amount (KES)</dt><dd>{{ r.amount_kes if r.amount_kes is not none else 'Not given' }}</dd></dl>
   <h3 class="mt">What happened</h3><p style="white-space:pre-wrap">{{ r.description }}</p>
-  {% if r.message_text %}<h3>Message text</h3><pre class="code" style="white-space:pre-wrap">{{ r.message_text }}</pre>{% endif %}
+  {% if r.message_text %}<h3>Message text</h3><pre tabindex="0" class="code" style="white-space:pre-wrap">{{ r.message_text }}</pre>{% endif %}
  </section>
  <section class="card"><h2>Evidence</h2>{% if evidence %}<div class="grid g2">{% for e in evidence %}<figure><img class="evidence" src="/evidence/{{ e.id }}" alt="Evidence image {{ loop.index }} for {{ r.ref }}" width="400"><figcaption class="small muted">{{ e.mime }} · {{ e.size // 1024 }} KB{% if e.primary_by_moderator %} · primary evidence (moderator){% endif %}</figcaption></figure>{% endfor %}</div>{% else %}<p class="muted">No evidence uploaded.</p>{% endif %}</section>
  {% if r.analysis %}<section class="card"><h2>Automated analysis</h2><p>Label: <b>{{ r.analysis.label|replace('_',' ') }}</b> · analysis confidence {{ (r.analysis.confidence * 100)|round|int }}% (not proof).</p><ul>{% for x in r.analysis.reasons %}<li>{{ x.text }}</li>{% endfor %}</ul></section>{% endif %}
@@ -26,18 +26,26 @@
   {% if not verify.allowed %}<p class="notice warn small">Verify is unavailable: {{ verify.reason }}.</p>{% else %}<p class="notice ok small">Can verify: {{ verify.reason }}.</p>{% endif %}
   <form method="post" action="/mod/{{ r.id }}/decide" enctype="multipart/form-data" class="stack">{{ csrf_field() }}
    <div class="field"><label for="reason">Reason (required, 8+ characters, recorded in the audit log)</label><textarea id="reason" name="reason" required minlength="8" rows="3"></textarea></div>
-   <div class="field"><label for="target">Merge into indicator (for merge only)</label><select id="target" name="target_indicator_id"><option value="">Choose...</option>{% for t in targets %}<option value="{{ t.id }}">#{{ t.id }} {{ t.norm_value[:40] }} ({{ t.status }})</option>{% endfor %}</select></div>
-   <div class="field"><label for="file">Attach primary evidence (image, for attach only)</label><input id="file" name="file" type="file" accept="image/png,image/jpeg,image/webp"></div>
+   <p class="small muted mb0">Most reports need only the first two actions. The other decisions are grouped below.</p>
    <div class="table-actions">
     <button class="btn" name="action" value="accept" type="submit">Accept as reported</button>
     <button class="btn" name="action" value="verify" type="submit" {% if not verify.allowed %}disabled aria-disabled="true"{% endif %}>Verify</button>
-    <button class="btn secondary" name="action" value="mark_unverified" type="submit">Mark unverified</button>
-    <button class="btn secondary" name="action" value="request_evidence" type="submit">Request evidence</button>
-    <button class="btn secondary" name="action" value="attach_evidence" type="submit">Attach evidence</button>
-    <button class="btn secondary" name="action" value="merge" type="submit">Merge as duplicate</button>
-    <button class="btn danger" name="action" value="reject" type="submit" data-confirm="Reject this report? The reporter is told it was not accepted.">Reject</button>
-    <button class="btn danger" name="action" value="restrict_reporter" type="submit" data-confirm="Restrict this reporter? They will not be able to submit further reports.">Restrict reporter</button>
    </div>
+   <details class="act-group" data-open-wide><summary>Ask for more or tidy up</summary>
+    <div class="stack">
+     <div class="table-actions"><button class="btn secondary" name="action" value="mark_unverified" type="submit">Mark unverified</button><button class="btn secondary" name="action" value="request_evidence" type="submit">Request evidence</button></div>
+     <div class="field"><label for="file">Attach primary evidence (image, for attach only)</label><input id="file" name="file" type="file" accept="image/png,image/jpeg,image/webp"></div>
+     <div><button class="btn secondary" name="action" value="attach_evidence" type="submit">Attach evidence</button></div>
+     <div class="field"><label for="target">Merge into indicator (for merge only)</label><select id="target" name="target_indicator_id"><option value="">Choose...</option>{% for t in targets %}<option value="{{ t.id }}">#{{ t.id }} {{ t.norm_value[:40] }} ({{ t.status }})</option>{% endfor %}</select></div>
+     <div><button class="btn secondary" name="action" value="merge" type="submit">Merge as duplicate</button></div>
+    </div>
+   </details>
+   <details class="act-group danger-group" data-open-wide><summary>Reject or restrict (asks you to confirm)</summary>
+    <div class="table-actions">
+     <button class="btn danger" name="action" value="reject" type="submit" data-confirm="Reject this report? The reporter is told it was not accepted.">Reject</button>
+     <button class="btn danger" name="action" value="restrict_reporter" type="submit" data-confirm="Restrict this reporter? They will not be able to submit further reports.">Restrict reporter</button>
+    </div>
+   </details>
   </form></section>
 </aside></div>
 {% endblock %}

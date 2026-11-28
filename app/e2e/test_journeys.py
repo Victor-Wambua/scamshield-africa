@@ -43,6 +43,7 @@ def sign_in(page, email: str, secret: str | None = None):
 
 def decide(page, report_id: int, action: str, reason: str, **extra):
     page.goto(f"/mod/{report_id}")
+    page.locator("details.act-group").evaluate_all("els => els.forEach(e => { e.open = true; })")  # groups are collapsed on phones
     page.fill("#reason", reason)
     if "target" in extra:
         page.select_option("#target", str(extra["target"]))
